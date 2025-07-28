@@ -1,3 +1,3 @@
 # Pi Homepage
 
-An entrypoint to my pi.
+An entrypoint to Raspberry Pi.
