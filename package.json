@@ -9,14 +9,16 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@buf/ethantlee_pi-protos.bufbuild_es": "2.6.2-20250803055516-4777d8ab5b9a.1",
+    "@bufbuild/protobuf": "^2.6.2",
     "@connectrpc/connect": "^2.0.3",
     "@connectrpc/connect-web": "^2.0.3",
-    "@ethantlee/pi-protos": "^1.0.2",
     "next": "15.4.4",
     "react": "19.1.0",
     "react-dom": "19.1.0"
   },
   "devDependencies": {
+    "@bufbuild/protoc-gen-es": "^2.6.2",
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",

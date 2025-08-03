@@ -1,29 +1,29 @@
-// src/components/CpuStats.tsx
 "use client";
 
+import { statsClient } from "@/lib/api/stats/client";
+import { StreamCpuResponse } from "@buf/ethantlee_pi-protos.bufbuild_es/stats/stats_pb";
 import { useEffect, useState } from "react";
-import { statsClient } from "@/lib/grpc";
-import { CpuResponse } from "@ethantlee/pi-protos/gen/ts/proto/api-stats/stats_pb";
 
 export function CpuStats() {
-  const [cpuData, setCpuData] = useState<CpuResponse | null>(null);
+  const [cpuData, setCpuData] = useState<StreamCpuResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    async function streamCpuStats() {
+    const streamCpuStats = async () => {
       try {
         const stream = statsClient.streamCpu({});
         for await (const response of stream) {
           setCpuData(response);
+          console.log(response);
         }
       } catch (err) {
         console.error("gRPC Stream Error:", err);
         setError("Failed to connect to the stats service.");
       }
-    }
+    };
 
     streamCpuStats();
-  }, []); // The empty dependency array ensures this runs once on mount
+  }, []);
 
   if (error) {
     return <div className="text-red-500">{error}</div>;
