@@ -6,13 +6,19 @@ on:
       - main
   workflow_dispatch:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  build-and-publish:
-    name: Call Docker Publish
+  release:
+    name: Call Release Workflow
     permissions:
-      contents: read
+      contents: write
       packages: write
-    uses: ethn1ee/pi/.github/workflows/docker-publish.yaml@main
+    uses: ethn1ee/pi/.github/workflows/release.yaml@main
     with:
-      image_name: pi-homepage
+      chart_path: charts/homepage
+      image_name: pi-api-homepage
+      image_tag: ${{ github.sha }}
     secrets: inherit
