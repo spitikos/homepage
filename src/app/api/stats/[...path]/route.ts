@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
     method: "POST",
     headers: req.headers,
     body: req.body,
-    // @ts-ignore - duplex is required for streaming but not yet in standard types
+    // @ts-expect-error duplex is required for streaming but not yet in standard types
     duplex: "half",
   });
 
