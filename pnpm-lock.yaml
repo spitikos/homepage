@@ -8,9 +8,15 @@ importers:
 
   .:
     dependencies:
-      '@ethanlee/pi-protos':
-        specifier: file:../../_tmp_pi_protos
-        version: file:../../_tmp_pi_protos
+      '@connectrpc/connect':
+        specifier: ^2.0.3
+        version: 2.0.3(@bufbuild/protobuf@2.6.2)
+      '@connectrpc/connect-web':
+        specifier: ^2.0.3
+        version: 2.0.3(@bufbuild/protobuf@2.6.2)(@connectrpc/connect@2.0.3(@bufbuild/protobuf@2.6.2))
+      '@ethantlee/pi-protos':
+        specifier: ^1.0.2
+        version: 1.0.2
       next:
         specifier: 15.4.4
         version: 15.4.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -59,6 +65,20 @@ packages:
     resolution: {integrity: sha512-30iZtAPgz+LTIYoeivqYo853f02jBYSd5uGnGpkFV0M3xOt9aN73erkgYAmZU43x4VfqcnLxW9Kpg3R5LC4YYw==}
     engines: {node: '>=6.0.0'}
 
+  '@bufbuild/protobuf@2.6.2':
+    resolution: {integrity: sha512-vLu7SRY84CV/Dd+NUdgtidn2hS5hSMUC1vDBY0VcviTdgRYkU43vIz3vIFbmx14cX1r+mM7WjzE5Fl1fGEM0RQ==}
+
+  '@connectrpc/connect-web@2.0.3':
+    resolution: {integrity: sha512-w4LZ2Ci+NW/kcMoHnoczJgyGTmxuv/MQ+tTm2UNL40HimXKWYCAna/fV0AbHRnTiteiwEBpeSCaxF34MetzhAw==}
+    peerDependencies:
+      '@bufbuild/protobuf': ^2.2.0
+      '@connectrpc/connect': 2.0.3
+
+  '@connectrpc/connect@2.0.3':
+    resolution: {integrity: sha512-jAbVMHVtDCydGt2P20VpmLjbLtERqSV0RMSyQF3k2zhK8pzQ2QaCAcyVhufClqrOAFZUKL5BqVYtttaxvhmRgg==}
+    peerDependencies:
+      '@bufbuild/protobuf': ^2.2.0
+
   '@emnapi/core@1.4.5':
     resolution: {integrity: sha512-XsLw1dEOpkSX/WucdqUhPWP7hDxSvZiY+fsUC14h+FtQ2Ifni4znbBt8punRX+Uj2JG/uDb8nEHVKvrVlvdZ5Q==}
 
@@ -106,8 +126,8 @@ packages:
     resolution: {integrity: sha512-Ul5l+lHEcw3L5+k8POx6r74mxEYKG5kOb6Xpy2gCRW6zweT6TEhAf8vhxGgjhqrd/VO/Dirhsb+1hNpD1ue9hw==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
-  '@ethanlee/pi-protos@file:../../_tmp_pi_protos':
-    resolution: {directory: ../../_tmp_pi_protos, type: directory}
+  '@ethantlee/pi-protos@1.0.2':
+    resolution: {integrity: sha512-FNyFsoKTVrU4SFR8+kUn+t9hUR+HFmbkbp3KLjtyEIlT6FFIsyWqEk5SunbCEuQ7G3ywC+Yh9pck8po21+89Xg==}
 
   '@humanfs/core@0.19.1':
     resolution: {integrity: sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA==}
@@ -1812,6 +1832,17 @@ snapshots:
       '@jridgewell/gen-mapping': 0.3.12
       '@jridgewell/trace-mapping': 0.3.29
 
+  '@bufbuild/protobuf@2.6.2': {}
+
+  '@connectrpc/connect-web@2.0.3(@bufbuild/protobuf@2.6.2)(@connectrpc/connect@2.0.3(@bufbuild/protobuf@2.6.2))':
+    dependencies:
+      '@bufbuild/protobuf': 2.6.2
+      '@connectrpc/connect': 2.0.3(@bufbuild/protobuf@2.6.2)
+
+  '@connectrpc/connect@2.0.3(@bufbuild/protobuf@2.6.2)':
+    dependencies:
+      '@bufbuild/protobuf': 2.6.2
+
   '@emnapi/core@1.4.5':
     dependencies:
       '@emnapi/wasi-threads': 1.0.4
@@ -1872,7 +1903,7 @@ snapshots:
       '@eslint/core': 0.15.1
       levn: 0.4.1
 
-  '@ethanlee/pi-protos@file:../../_tmp_pi_protos': {}
+  '@ethantlee/pi-protos@1.0.2': {}
 
   '@humanfs/core@0.19.1': {}
 
