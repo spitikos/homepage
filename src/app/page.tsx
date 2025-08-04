@@ -1,11 +1,5 @@
-import { CpuStats } from "@/components/stats/cpu";
+import Link from "next/link";
 
 export default function Home() {
-  return (
-    <main className="min-h-screen p-5">
-      <h1 className="text-3xl font-bold mb-4">Raspberry Pi Stats</h1>
-
-      <CpuStats />
-    </main>
-  );
+  return <Link href="/stats">STATS</Link>;
 }

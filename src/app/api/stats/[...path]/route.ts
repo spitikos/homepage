@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
 
-const API_URL = "http://api-stats.api-stats.svc.cluster.local:50051";
+const API_URL = "http://localhost:50051"; //"http://api-stats.api-stats.svc.cluster.local:50051";
 
 export async function POST(req: NextRequest) {
   const { pathname, search } = new URL(req.url);
@@ -11,6 +11,7 @@ export async function POST(req: NextRequest) {
     method: "POST",
     headers: req.headers,
     body: req.body,
+    signal: req.signal,
     // @ts-expect-error duplex is required for streaming but not yet in standard types
     duplex: "half",
   });

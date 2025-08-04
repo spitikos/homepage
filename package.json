@@ -9,10 +9,12 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@buf/ethantlee_pi-protos.bufbuild_es": "2.6.2-20250803055516-4777d8ab5b9a.1",
+    "@buf/ethantlee_pi-protos.bufbuild_es": "2.6.2-20250803184654-3b1d9d576520.1",
     "@bufbuild/protobuf": "^2.6.2",
     "@connectrpc/connect": "^2.0.3",
     "@connectrpc/connect-web": "^2.0.3",
+    "@tabler/icons-react": "^3.34.1",
+    "motion": "^12.23.12",
     "next": "15.4.4",
     "react": "19.1.0",
     "react-dom": "19.1.0"
@@ -20,14 +22,16 @@
   "devDependencies": {
     "@bufbuild/protoc-gen-es": "^2.6.2",
     "@eslint/eslintrc": "^3",
+    "@eslint/js": "^9.32.0",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "@types/ws": "^8.18.1",
-    "eslint": "^9",
+    "@typescript-eslint/parser": "^8.38.0",
+    "eslint": "^9.32.0",
     "eslint-config-next": "15.4.4",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.38.0"
   }
 }
