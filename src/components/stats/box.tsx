@@ -37,6 +37,7 @@ const StatsBox = memo(({ title, stats }: StatsBoxProps) => {
           className="absolute bg-highlight -z-10 h-6 rounded w-[calc(100%+16px)] -left-2"
         />
 
+        {/* TABLE */}
         <table className="text-sm">
           <thead className="sr-only">
             <tr>
@@ -62,6 +63,7 @@ const StatsBox = memo(({ title, stats }: StatsBoxProps) => {
     </div>
   );
 });
+StatsBox.displayName = "StatsBox";
 
 export default StatsBox;
 
@@ -94,6 +96,7 @@ const StatRow = memo(
     );
   },
 );
+StatRow.displayName = "StatRow";
 
 const Gauge = ({ percent }: { percent: number }) => {
   return (
