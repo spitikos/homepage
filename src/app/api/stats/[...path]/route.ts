@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
 
-const API_URL = "http://localhost:50051"; //"http://api-stats.api-stats.svc.cluster.local:50051";
+const API_URL = "http://api-stats.api-stats.svc.cluster.local:50051";
 
 export async function POST(req: NextRequest) {
   const { pathname, search } = new URL(req.url);

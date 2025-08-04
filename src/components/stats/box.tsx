@@ -38,7 +38,7 @@ const StatsBox = memo(({ title, stats }: StatsBoxProps) => {
         />
 
         {/* TABLE */}
-        <table className="text-sm">
+        <table className="text-sm w-full">
           <thead className="sr-only">
             <tr>
               <th className="text-left w-1/2">FIELD</th>
@@ -100,11 +100,11 @@ StatRow.displayName = "StatRow";
 
 const Gauge = ({ percent }: { percent: number }) => {
   return (
-    <span className="h-1 bg-tertiary w-full relative">
+    <span className="h-1 bg-tertiary w-full block relative">
       <motion.span
         animate={{ scaleX: percent }}
         transition={{ duration: 0.3, ease: "circOut" }}
-        className="h-1 bg-primary w-full origin-left"
+        className="h-1 bg-primary w-full origin-left block"
       />
     </span>
   );

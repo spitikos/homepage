@@ -46,6 +46,13 @@ export default function Stats() {
       ],
     },
     {
+      title: "network",
+      stats: [
+        { field: "in", value: null },
+        { field: "out", value: null },
+      ],
+    },
+    {
       title: "temperature",
       stats: [
         { field: "cpu", value: temperature ? temperature.cpu + "°C" : null },
