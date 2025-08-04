@@ -5,7 +5,7 @@ import { useStats } from "@/hooks/use-stats";
 import { ComponentProps } from "react";
 
 export default function Stats() {
-  const { host, cpu, memory, disk, temperature } = useStats();
+  const { host, cpu, memory, disk, temperature, network } = useStats();
 
   const data = [
     {
@@ -48,8 +48,8 @@ export default function Stats() {
     {
       title: "network",
       stats: [
-        { field: "in", value: null },
-        { field: "out", value: null },
+        { field: "in", value: network?.bytesIn },
+        { field: "out", value: network?.bytesOut },
       ],
     },
     {

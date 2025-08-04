@@ -4,6 +4,7 @@ import {
   StreamDiskResponse,
   StreamHostResponse,
   StreamMemoryResponse,
+  StreamNetworkResponse,
   StreamTemperatureResponse,
 } from "@buf/ethantlee_pi-protos.bufbuild_es/api-stats/stats_pb";
 import { createClient } from "@connectrpc/connect";
@@ -17,6 +18,7 @@ export const useStats = () => {
   const [host, setHost] = useState<StreamHostResponse | null>(null);
   const [temperature, setTemperature] =
     useState<StreamTemperatureResponse | null>(null);
+  const [network, setNetwork] = useState<StreamNetworkResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const client = useMemo(() => {
@@ -59,6 +61,12 @@ export const useStats = () => {
       setStat: setTemperature,
       setError,
     });
+    streamStats({
+      stream: client.streamNetwork({}),
+      isCanceled,
+      setStat: setNetwork,
+      setError,
+    });
 
     return () => {
       isCanceled = true;
@@ -71,6 +79,7 @@ export const useStats = () => {
     disk,
     host,
     temperature,
+    network,
     error,
   };
 };

@@ -9,8 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@buf/ethantlee_pi-protos.bufbuild_es": "2.6.2-20250803184654-3b1d9d576520.1",
-    "@bufbuild/protobuf": "^2.6.2",
+    "@buf/ethantlee_pi-protos.bufbuild_es": "2.6.2-20250804192709-56f3e20114e2.1",
+    "@bufbuild/protobuf": "^2.6.3",
     "@connectrpc/connect": "^2.0.3",
     "@connectrpc/connect-web": "^2.0.3",
     "@tabler/icons-react": "^3.34.1",
@@ -20,18 +20,18 @@
     "react-dom": "19.1.0"
   },
   "devDependencies": {
-    "@bufbuild/protoc-gen-es": "^2.6.2",
-    "@eslint/eslintrc": "^3",
+    "@bufbuild/protoc-gen-es": "^2.6.3",
+    "@eslint/eslintrc": "^3.3.1",
     "@eslint/js": "^9.32.0",
-    "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "@typescript-eslint/parser": "^8.38.0",
+    "@tailwindcss/postcss": "^4.1.11",
+    "@types/node": "^20.19.9",
+    "@types/react": "^19.1.9",
+    "@types/react-dom": "^19.1.7",
+    "@typescript-eslint/parser": "^8.39.0",
     "eslint": "^9.32.0",
     "eslint-config-next": "15.4.4",
-    "tailwindcss": "^4",
-    "typescript": "^5.8.3",
-    "typescript-eslint": "^8.38.0"
+    "tailwindcss": "^4.1.11",
+    "typescript": "^5.9.2",
+    "typescript-eslint": "^8.39.0"
   }
 }
