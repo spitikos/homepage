@@ -1,71 +1,109 @@
 "use client";
 
 import { StatsBox } from "@/components/stats";
-import { useStats } from "@/hooks/use-stats";
-import { ComponentProps } from "react";
+import { usePrometheus } from "@/hooks";
+import { ComponentProps, Suspense } from "react";
+
+const NODE_EXPORTER_JOB = "node-exporter";
 
 export default function Stats() {
-  const { host, cpu, memory, disk, temperature, network } = useStats();
+  const { data: hostOs } = usePrometheus({
+    query: "node_os_info",
+    labels: { job: NODE_EXPORTER_JOB },
+  });
+  const { data: hostUptime } = usePrometheus({
+    query: "node_time_seconds",
+    labels: { job: NODE_EXPORTER_JOB },
+  });
+  const { data: hostArch } = usePrometheus({
+    query: "node_uname_info",
+    labels: { job: NODE_EXPORTER_JOB },
+  });
+  const { data: resourceCpu } = usePrometheus({
+    query: "node_load5",
+    labels: { job: NODE_EXPORTER_JOB },
+  });
+  const { data: resourceMem } = usePrometheus({
+    query:
+      "(node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) / node_memory_MemTotal_bytes",
+    labels: { job: NODE_EXPORTER_JOB },
+  });
+  const { data: resourceDisk } = usePrometheus({
+    query:
+      '(node_filesystem_size_bytes{mountpoint="/"} - node_filesystem_free_bytes{mountpoint="/"}) / node_filesystem_size_bytes{mountpoint="/"}',
+  });
+  const { data: networkIn } = usePrometheus({
+    query: "node_network_receive_bytes_total",
+    labels: { job: NODE_EXPORTER_JOB, device: "wlan0" },
+  });
+  const { data: networkOut } = usePrometheus({
+    query: "node_network_transmit_bytes_total",
+    labels: { job: NODE_EXPORTER_JOB, device: "wlan0" },
+  });
+  const { data: tempCpu } = usePrometheus({
+    query: "node_hwmon_temp_celsius",
+    labels: { job: NODE_EXPORTER_JOB, chip: "1000120000_pcie_1f000c8000_adc" },
+  });
+  const { data: tempNvme } = usePrometheus({
+    query: "node_hwmon_temp_celsius",
+    labels: { job: NODE_EXPORTER_JOB, chip: "nvme_nvme0", sensor: "temp1" },
+  });
 
-  const data = [
+  const stats = [
     {
       title: "host",
       stats: [
-        { field: "os", value: host?.os },
         {
-          field: "platform",
-          value: host ? host.platform + " " + host.platformVersion : null,
+          field: "os",
+          value: hostOs?.metric["pretty_name"],
         },
-        { field: "architecture", value: host?.architecture },
-        { field: "uptime", value: host?.uptime },
-        { field: "processes", value: host?.processes },
-        {
-          field: "boot time",
-          value: host?.bootTime,
-        },
+        { field: "architecture", value: hostArch?.metric["machine"] },
+        { field: "uptime", value: hostUptime?.value[1] },
       ],
     },
     {
-      title: "resources",
+      title: "resource",
       stats: [
         {
           field: "cpu",
           type: "gauge",
-          value: cpu ? cpu.percent[0] / 100 : null,
+          value: parseFloat(resourceCpu?.value[1]),
         },
         {
           field: "memory",
           type: "gauge",
-          value: memory ? memory.usedPercent / 100 : null,
+          value: parseFloat(resourceMem?.value[1]),
         },
         {
           field: "disk",
           type: "gauge",
-          value: disk ? disk.usedPercent / 100 : null,
+          value: parseFloat(resourceDisk?.value[1]),
         },
       ],
     },
     {
       title: "network",
       stats: [
-        { field: "in", value: network?.bytesIn },
-        { field: "out", value: network?.bytesOut },
+        { field: "in", value: networkIn?.value[1] },
+        { field: "out", value: networkOut?.value[1] },
       ],
     },
     {
       title: "temperature",
       stats: [
-        { field: "cpu", value: temperature ? temperature.cpu + "°C" : null },
-        { field: "nvme", value: temperature ? temperature.nvme + "°C" : null },
+        { field: "cpu", value: tempCpu ? tempCpu.value[1] + "°C" : null },
+        { field: "nvme", value: tempNvme ? tempNvme.value[1] + "°C" : null },
       ],
     },
   ] satisfies ComponentProps<typeof StatsBox>[];
 
   return (
-    <div className="grid grid-cols-4 border-y">
-      {data.map((props, i) => (
-        <StatsBox key={i} {...props} />
-      ))}
-    </div>
+    <Suspense>
+      <div className="grid grid-cols-4 border-y">
+        {stats.map((props, i) => (
+          <StatsBox key={i} {...props} />
+        ))}
+      </div>
+    </Suspense>
   );
 }

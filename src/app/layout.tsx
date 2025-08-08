@@ -1,5 +1,6 @@
 import { Header } from "@/components/nav";
-import type { Metadata } from "next";
+import { Providers } from "@/components/providers";
+import { Metadata } from "next";
 import { ppNeueMontreal, ppNeueMontrealMono } from "./_fonts/fonts";
 import "./globals.css";
 
@@ -18,9 +19,11 @@ export default function RootLayout({
       <body
         className={`${ppNeueMontreal.variable} ${ppNeueMontrealMono.variable} antialiased min-h-svh`}
       >
-        <div className="bg-noise" />
-        <Header />
-        <main className="pt-12">{children}</main>
+        <Providers>
+          <div className="bg-noise" />
+          <Header />
+          <main className="pt-12">{children}</main>
+        </Providers>
       </body>
     </html>
   );

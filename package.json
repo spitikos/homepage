@@ -9,15 +9,23 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@buf/ethantlee_pi-protos.bufbuild_es": "2.6.2-20250804192709-56f3e20114e2.1",
+    "@better-fetch/fetch": "^1.1.18",
+    "@buf/ethantlee_pi-protos.bufbuild_es": "2.6.3-20250807160826-0d73e56899b9.1",
+    "@buf/ethantlee_pi-protos.connectrpc_query-es": "2.1.1-20250807160826-0d73e56899b9.1",
     "@bufbuild/protobuf": "^2.6.3",
     "@connectrpc/connect": "^2.0.3",
+    "@connectrpc/connect-next": "^2.0.3",
+    "@connectrpc/connect-query": "^2.1.1",
     "@connectrpc/connect-web": "^2.0.3",
     "@tabler/icons-react": "^3.34.1",
+    "@tanstack/react-query": "^5.84.1",
+    "@tanstack/react-query-devtools": "^5.84.1",
+    "effect": "^3.17.6",
     "motion": "^12.23.12",
     "next": "15.4.4",
     "react": "19.1.0",
-    "react-dom": "19.1.0"
+    "react-dom": "19.1.0",
+    "zod": "^4.0.15"
   },
   "devDependencies": {
     "@bufbuild/protoc-gen-es": "^2.6.3",
