@@ -1,46 +1,18 @@
+import { PrometheusSchema } from "@/lib/schema";
 import { createFetch, createSchema } from "@better-fetch/fetch";
 import { useQuery } from "@tanstack/react-query";
-import { z } from "zod";
 
 const BASE_URL = "/api/prometheus";
 const REFRESH_INTERVAL = 5 * 1000; // 5 seconds
 
-const prometheusSchema = {
-  status: z.enum(["success", "error"]),
-  resultType: z.enum(["vector", "matrix", "scalar", "string"]),
-  metric: z.record(z.string(), z.string()),
-  value: z.tuple([z.number(), z.string()]),
-  query: z.object({ query: z.string() }),
-
-  queryResponse(isRange: boolean) {
-    return z.object({
-      status: this.status,
-      data: z.object({
-        resultType: this.resultType,
-        result: z.array(
-          isRange
-            ? z.object({
-                metric: this.metric,
-                values: z.array(this.value),
-              })
-            : z.object({
-                metric: this.metric,
-                value: this.value,
-              }),
-        ),
-      }),
-    });
-  },
-};
-
 const querySchema = createSchema({
   "/query": {
-    query: prometheusSchema.query,
-    output: prometheusSchema.queryResponse(false),
+    query: PrometheusSchema.primitives.query,
+    output: PrometheusSchema.vectorResponse,
   },
   "/query_range": {
-    query: prometheusSchema.query,
-    output: prometheusSchema.queryResponse(true),
+    query: PrometheusSchema.primitives.query,
+    output: PrometheusSchema.matrixResponse,
   },
 });
 
@@ -57,6 +29,16 @@ type UsePrometheusProps = {
     start: Date;
     end: Date;
   };
+};
+
+function usePrometheus(props: Omit<UsePrometheusProps, "range">): {
+  data: PrometheusSchema.VectorResponse["data"]["result"][0];
+  error: Error | null;
+};
+
+function usePrometheus(props: Required<UsePrometheusProps>): {
+  data: PrometheusSchema.MatrixResponse["data"]["result"][0];
+  error: Error | null;
 };
 
 function usePrometheus({ query, labels, range }: UsePrometheusProps) {
