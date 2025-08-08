@@ -16,9 +16,9 @@ jobs:
     permissions:
       contents: write
       packages: write
-    uses: ethn1ee/pi/.github/workflows/release.yaml@main
+    uses: spitikos/pi/.github/workflows/release.yaml@main
     with:
       chart_path: charts/homepage
-      image_name: pi-homepage
+      image_name: spitikos/homepage
       image_tag: ${{ github.sha }}
     secrets: inherit
