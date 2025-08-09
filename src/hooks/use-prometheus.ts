@@ -25,6 +25,16 @@ const $fetch = createFetch({
   },
 });
 
+export type PrometheusMetric = {
+  metric: Record<string, string>;
+  value: [Date, number];
+};
+
+export type PrometheusMetricRange = {
+  metric: Record<string, string>;
+  values: [Date, number][];
+};
+
 type UsePrometheusProps = {
   query: string;
   range?: {
@@ -34,22 +44,12 @@ type UsePrometheusProps = {
 };
 
 function usePrometheus(props: Omit<UsePrometheusProps, "range">): {
-  data:
-    | {
-        metric: Record<string, string>;
-        value: [Date, number];
-      }[]
-    | undefined;
+  data: PrometheusMetric[] | undefined;
   error: Error | null;
 };
 
 function usePrometheus(props: Required<UsePrometheusProps>): {
-  data:
-    | {
-        metric: Record<string, string>;
-        values: [Date, number][];
-      }[]
-    | undefined;
+  data: PrometheusMetricRange[] | undefined;
   error: Error | null;
 };
 
@@ -68,23 +68,22 @@ function usePrometheus({ query, range }: UsePrometheusProps) {
   });
 
   const instantResult = instantQuery.data?.data.result.map(
-    ({ metric, value: [timestamp, value] }) => ({
-      metric,
-      value: [new Date(timestamp * 1000), parseFloat(value)] satisfies [
-        Date,
-        number,
-      ],
-    }),
+    ({ metric, value: [timestamp, value] }) =>
+      ({
+        metric,
+        value: [new Date(timestamp * 1000), parseFloat(value)],
+      }) satisfies PrometheusMetric,
   );
 
   const rangeResult = rangeQuery.data?.data.result.map(
-    ({ metric, values }) => ({
-      metric,
-      values: values.map(([timestamp, value]) => [
-        new Date(timestamp * 1000),
-        parseFloat(value),
-      ]) satisfies [Date, number][],
-    }),
+    ({ metric, values }) =>
+      ({
+        metric,
+        values: values.map(([timestamp, value]) => [
+          new Date(timestamp * 1000),
+          parseFloat(value),
+        ]),
+      }) satisfies PrometheusMetricRange,
   );
 
   return !!range
