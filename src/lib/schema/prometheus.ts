@@ -28,7 +28,7 @@ const matrixResponse = z.object({
     result: z.array(
       z.object({
         metric: primitives.metric,
-        value: z.array(primitives.value),
+        values: z.array(primitives.value),
       }),
     ),
   }),
@@ -55,5 +55,11 @@ type MatrixResponse = z.infer<typeof matrixResponse>;
 type ScalarResponse = z.infer<typeof scalarResponse>;
 type StringResponse = z.infer<typeof stringResponse>;
 
-export { primitives, matrixResponse, scalarResponse, stringResponse, vectorResponse };
+export {
+  matrixResponse,
+  primitives,
+  scalarResponse,
+  stringResponse,
+  vectorResponse,
+};
 export type { MatrixResponse, ScalarResponse, StringResponse, VectorResponse };

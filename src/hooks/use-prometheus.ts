@@ -3,7 +3,7 @@ import { createFetch, createSchema } from "@better-fetch/fetch";
 import { useQuery } from "@tanstack/react-query";
 
 const BASE_URL = "https://prometheus.spitikos.dev/api/v1";
-const REFRESH_INTERVAL = 5 * 1000; // 5 seconds
+const REFRESH_INTERVAL = 2 * 1000; // 5 seconds
 
 const querySchema = createSchema({
   "/query": {
@@ -20,11 +20,13 @@ const $fetch = createFetch({
   baseURL: BASE_URL,
   schema: querySchema,
   throw: true,
+  fetchOptions: {
+    cache: "no-store",
+  },
 });
 
 type UsePrometheusProps = {
   query: string;
-  labels?: Record<string, string>;
   range?: {
     start: Date;
     end: Date;
@@ -32,45 +34,66 @@ type UsePrometheusProps = {
 };
 
 function usePrometheus(props: Omit<UsePrometheusProps, "range">): {
-  data: PrometheusSchema.VectorResponse["data"]["result"][0];
+  data:
+    | {
+        metric: Record<string, string>;
+        value: [Date, number];
+      }[]
+    | undefined;
   error: Error | null;
 };
 
 function usePrometheus(props: Required<UsePrometheusProps>): {
-  data: PrometheusSchema.MatrixResponse["data"]["result"][0];
+  data:
+    | {
+        metric: Record<string, string>;
+        values: [Date, number][];
+      }[]
+    | undefined;
   error: Error | null;
 };
 
-function usePrometheus({ query, labels, range }: UsePrometheusProps) {
-  const labelString = labels
-    ? "{" +
-      Object.entries(labels)
-        .map(([key, val]) => `${key}="${val}"`)
-        .join(", ") +
-      "}"
-    : "";
-  const fullQuery = query + labelString;
-
+function usePrometheus({ query, range }: UsePrometheusProps) {
   const instantQuery = useQuery({
     enabled: range === undefined,
-    queryKey: ["prometheus", query, labels],
-    queryFn: () => $fetch("/query", { query: { query: fullQuery } }),
+    queryKey: ["prometheus", query],
+    queryFn: () => $fetch("/query", { query: { query } }),
     refetchInterval: REFRESH_INTERVAL,
   });
   const rangeQuery = useQuery({
     enabled: range !== undefined,
-    queryKey: ["prometheus", query, labels, range],
-    queryFn: () => $fetch("/query_range", { query: { query: fullQuery } }),
+    queryKey: ["prometheus", query, range],
+    queryFn: () => $fetch("/query_range", { query: { query } }),
     refetchInterval: REFRESH_INTERVAL,
   });
 
-  return range
+  const instantResult = instantQuery.data?.data.result.map(
+    ({ metric, value: [timestamp, value] }) => ({
+      metric,
+      value: [new Date(timestamp * 1000), parseFloat(value)] satisfies [
+        Date,
+        number,
+      ],
+    }),
+  );
+
+  const rangeResult = rangeQuery.data?.data.result.map(
+    ({ metric, values }) => ({
+      metric,
+      values: values.map(([timestamp, value]) => [
+        new Date(timestamp * 1000),
+        parseFloat(value),
+      ]) satisfies [Date, number][],
+    }),
+  );
+
+  return !!range
     ? {
-        data: rangeQuery.data?.data.result[0],
+        data: rangeResult,
         error: rangeQuery.error,
       }
     : {
-        data: instantQuery.data?.data.result[0],
+        data: instantResult,
         error: instantQuery.error,
       };
 }
