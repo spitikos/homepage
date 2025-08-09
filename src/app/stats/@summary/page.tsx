@@ -6,7 +6,7 @@ import { ComponentProps } from "react";
 
 const hostQuery = `{__name__=~"node_os_info|node_time_seconds|node_uname_info"}`;
 
-const cpuQuery = `avg(1 - rate(node_cpu_seconds_total{mode="idle"}[10s]))`;
+const cpuQuery = `avg(1 - rate(node_cpu_seconds_total{mode="idle"}[1m]))`;
 const memoryQuery =
   "(node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) / node_memory_MemTotal_bytes";
 const diskQuery = `(node_filesystem_size_bytes{mountpoint="/"} - node_filesystem_free_bytes{mountpoint="/"}) / node_filesystem_size_bytes{mountpoint="/"}`;
@@ -49,17 +49,17 @@ export default function Stats() {
       {
         field: "cpu",
         type: "gauge",
-        value: cpuData?.[0].value[1],
+        value: cpuData?.[0]?.value[1],
       },
       {
         field: "memory",
         type: "gauge",
-        value: memoryData?.[0].value[1],
+        value: memoryData?.[0]?.value[1],
       },
       {
         field: "disk",
         type: "gauge",
-        value: diskData?.[0].value[1],
+        value: diskData?.[0]?.value[1],
       },
     ],
   } satisfies ComponentProps<typeof StatsBox>;
