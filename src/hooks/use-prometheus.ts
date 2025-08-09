@@ -3,7 +3,7 @@ import { createFetch, createSchema } from "@better-fetch/fetch";
 import { useQuery } from "@tanstack/react-query";
 
 const BASE_URL = "https://prometheus.spitikos.dev/api/v1";
-const REFRESH_INTERVAL = 2 * 1000; // 5 seconds
+const REFRESH_INTERVAL = 15 * 1000; // 15 seconds
 
 const querySchema = createSchema({
   "/query": {
