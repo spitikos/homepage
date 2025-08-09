@@ -2,7 +2,7 @@ import { StatsBox } from "@/components/stats";
 import { PrometheusMetric } from "@/hooks/use-prometheus";
 import { ComponentProps } from "react";
 
-const hostQuery = `{__name__=~"node_os_info|node_time_seconds|node_uname_info"}`;
+const hostQuery = `{__name__=~"node_os_info|node_time_seconds|node_boot_time_seconds|node_uname_info"}`;
 const cpuQuery = `avg(1 - rate(node_cpu_seconds_total{mode="idle"}[1m]))`;
 const memoryQuery =
   "(node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) / node_memory_MemTotal_bytes";
@@ -36,6 +36,14 @@ export const transformData = ({
   temperatureData,
   networkData,
 }: PrometheusData) => {
+  const hostCurrTime = hostData?.find(
+    (m) => m.metric.__name__ === "node_time_seconds",
+  )?.value[1];
+  const hostBootTime = hostData?.find(
+    (m) => m.metric.__name__ === "node_boot_time_seconds",
+  )?.value[1];
+  const hostUptime =
+    hostCurrTime && hostBootTime ? hostCurrTime - hostBootTime : null;
   const host = {
     title: "host",
     stats: [
@@ -51,8 +59,7 @@ export const transformData = ({
       },
       {
         field: "uptime",
-        value: hostData?.find((m) => m.metric.__name__ === "node_time_seconds")
-          ?.value[1],
+        value: hostUptime ? Math.round(hostUptime / (60 * 60)) + " h" : null,
       },
     ],
   } satisfies ComponentProps<typeof StatsBox>;
