@@ -5,7 +5,7 @@ import { statsData } from "@/data";
 
 const StatsCurrent = () => {
   return (
-    <div className="grid max-sm:grid-cols-1 max-md:grid-cols-2 grid-cols-4 border-y">
+    <div className="grid max-sm:grid-cols-1 max-lg:grid-cols-2 grid-cols-4 border-b">
       {Object.entries(statsData).map(([title, data], i) => (
         <StatsBox key={i} title={title} stats={data} />
       ))}

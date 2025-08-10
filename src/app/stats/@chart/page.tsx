@@ -19,7 +19,9 @@ const StatsChart = () => {
   const { selectedStat } = useContext(StatsContext);
 
   return (
-    <div className="">{selectedStat && <Chart stat={selectedStat} />}</div>
+    <div className="py-5 w-full h-[50vh]">
+      {selectedStat && <Chart stat={selectedStat} />}
+    </div>
   );
 };
 
@@ -37,9 +39,18 @@ const Chart = ({ stat }: { stat: Stat }) => {
     },
   } satisfies ChartConfig;
 
+  const yDomain =
+    stat.displayType === "gauge"
+      ? [0, 1]
+      : [0, Math.max(...values.map((v) => v.value)) * 1.2];
+
   return (
-    <ChartContainer config={chartConfig} className="w-full h-[50vh]">
-      <LineChart accessibilityLayer data={values}>
+    <ChartContainer config={chartConfig} className="size-full">
+      <LineChart
+        accessibilityLayer
+        data={values}
+        margin={{ top: 20, bottom: 20 }}
+      >
         <ChartTooltip
           cursor={false}
           isAnimationActive={true}
@@ -70,10 +81,8 @@ const Chart = ({ stat }: { stat: Stat }) => {
           }}
         />
 
-        <YAxis
-          hide
-          domain={stat.displayType === "gauge" ? [0, 1] : undefined}
-        />
+        <YAxis hide domain={yDomain} />
+
         <Line
           dataKey="value"
           name={stat.field.toUpperCase()}

@@ -1,12 +1,8 @@
-import { PrometheusSchema } from "@/lib/prometheus";
+import { PrometheusConfig, PrometheusSchema } from "@/lib/prometheus";
 import { Stat } from "@/lib/prometheus/schema";
 import { createFetch, createSchema } from "@better-fetch/fetch";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { useMemo } from "react";
 import z from "zod";
-
-const BASE_URL = "https://prometheus.spitikos.dev/api/v1";
-const REFRESH_INTERVAL = 15 * 1000; // 15 seconds
 
 const querySchema = createSchema({
   "/query": {
@@ -27,7 +23,7 @@ const querySchema = createSchema({
 });
 
 const $fetch = createFetch({
-  baseURL: BASE_URL,
+  baseURL: PrometheusConfig.BASE_URL,
   schema: querySchema,
   throw: true,
   fetchOptions: {
@@ -35,24 +31,12 @@ const $fetch = createFetch({
   },
 });
 
-function usePrometheus({ query, range }: Stat) {
-  const now = useMemo(() => Date.now(), []);
-
-  const instantFetch = () => $fetch("/query", { query: { query } });
-  const rangeFetch = () =>
-    $fetch("/query_range", {
-      query: {
-        query,
-        start: range ? range.start.getTime() / 1000 : now / 1000 - 3600 * 24,
-        end: range ? range.end.getTime() / 1000 : now / 1000,
-        step: 600,
-      },
-    });
-
+function usePrometheus({ query }: Stat) {
   const { data: instantData, error: instantError } = useSuspenseQuery({
-    queryKey: ["prometheus", query],
-    queryFn: instantFetch,
-    refetchInterval: REFRESH_INTERVAL,
+    queryKey: ["prometheus", "instant", query],
+    queryFn: () => $fetch("/query", { query: { query } }),
+    refetchInterval: PrometheusConfig.REFRESH_INTERVAL,
+    staleTime: PrometheusConfig.REFRESH_INTERVAL,
     select: (data) =>
       data?.data.result.map(({ metric, value: [timestamp, value] }) => ({
         labels: metric,
@@ -65,9 +49,25 @@ function usePrometheus({ query, range }: Stat) {
   if (instantError) console.error(instantError);
 
   const { data: rangeData, error: rangeError } = useSuspenseQuery({
-    queryKey: ["prometheus", query, range],
-    queryFn: rangeFetch,
-    refetchInterval: REFRESH_INTERVAL,
+    queryKey: ["prometheus", "range", query],
+    queryFn: () => {
+      const now = Math.floor(Date.now() / 1000);
+      const range = {
+        start: now - PrometheusConfig.RANGE_LENGTH,
+        end: now,
+      };
+
+      return $fetch("/query_range", {
+        query: {
+          query,
+          start: range.start,
+          end: range.end,
+          step: PrometheusConfig.RANGE_LENGTH / PrometheusConfig.RANGE_POINTS,
+        },
+      });
+    },
+    refetchInterval: PrometheusConfig.REFRESH_INTERVAL,
+    staleTime: PrometheusConfig.REFRESH_INTERVAL,
     select: (data) =>
       data?.data.result.map(({ metric, values }) => ({
         labels: metric,

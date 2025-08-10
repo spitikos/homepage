@@ -70,10 +70,6 @@ type Stat = {
   field: string;
   query: string;
   displayType?: "literal" | "gauge";
-  range?: {
-    start: Date;
-    end: Date;
-  };
 } & (
   | { type: "label"; label: string; refine?: (data: string) => string }
   | {

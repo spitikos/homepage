@@ -12,12 +12,6 @@
 
   --font-sans: var(--font-pp-neue-montreal);
   --font-mono: var(--font-pp-neue-montreal-mono);
-
-  --color-chart-5: var(--chart-5);
-  --color-chart-4: var(--chart-4);
-  --color-chart-3: var(--chart-3);
-  --color-chart-2: var(--chart-2);
-  --color-chart-1: var(--chart-1);
 }
 
 @layer base {
@@ -32,14 +26,6 @@
 
 @layer components {
   .bg-noise {
-    @apply bg-[url(/noise.webp)] fixed size-full top-0 left-0 bg-repeat opacity-30 -z-50;
+    @apply bg-[url(/noise.webp)] bg-repeat opacity-30 -z-50;
   }
-}
-
-:root {
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
 }

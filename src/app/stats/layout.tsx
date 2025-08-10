@@ -9,7 +9,7 @@ const StatsLayout = ({
   chart: Readonly<ReactNode>;
 }) => {
   return (
-    <main className="space-y-20">
+    <main className="*:border-b">
       <StatsProvider>
         <section>{current}</section>
         <section>{chart}</section>
