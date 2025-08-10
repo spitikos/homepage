@@ -67,7 +67,7 @@ function usePrometheus({ query, range }: Stat) {
   const { data: rangeData, error: rangeError } = useSuspenseQuery({
     queryKey: ["prometheus", query, range],
     queryFn: rangeFetch,
-    refetchInterval: false,
+    refetchInterval: REFRESH_INTERVAL,
     select: (data) =>
       data?.data.result.map(({ metric, values }) => ({
         labels: metric,
