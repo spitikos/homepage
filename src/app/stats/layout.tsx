@@ -9,7 +9,7 @@ const StatsLayout = ({
   chart: Readonly<ReactNode>;
 }) => {
   return (
-    <main className="flex flex-col justify-between">
+    <main className="space-y-20">
       <StatsProvider>
         <section>{current}</section>
         <section>{chart}</section>

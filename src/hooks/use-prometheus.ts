@@ -2,6 +2,7 @@ import { PrometheusSchema } from "@/lib/prometheus";
 import { Stat } from "@/lib/prometheus/schema";
 import { createFetch, createSchema } from "@better-fetch/fetch";
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { useMemo } from "react";
 import z from "zod";
 
 const BASE_URL = "https://prometheus.spitikos.dev/api/v1";
@@ -35,7 +36,7 @@ const $fetch = createFetch({
 });
 
 function usePrometheus({ query, range }: Stat) {
-  const now = Date.now();
+  const now = useMemo(() => Date.now(), []);
 
   const instantFetch = () => $fetch("/query", { query: { query } });
   const rangeFetch = () =>
@@ -44,7 +45,7 @@ function usePrometheus({ query, range }: Stat) {
         query,
         start: range ? range.start.getTime() / 1000 : now / 1000 - 3600 * 24,
         end: range ? range.end.getTime() / 1000 : now / 1000,
-        step: 300,
+        step: 600,
       },
     });
 

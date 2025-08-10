@@ -34,8 +34,6 @@ export default StatRow;
 const Value = (stat: Stat) => {
   const { instant: data } = usePrometheus(stat);
 
-  if (!data) return "-";
-
   const {
     labels,
     value: { value },

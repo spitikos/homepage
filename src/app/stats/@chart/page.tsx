@@ -38,7 +38,7 @@ const Chart = ({ stat }: { stat: Stat }) => {
   } satisfies ChartConfig;
 
   return (
-    <ChartContainer config={chartConfig} className="w-full">
+    <ChartContainer config={chartConfig} className="w-full h-[50vh]">
       <AreaChart accessibilityLayer data={values}>
         {/*<CartesianGrid
           vertical={false}

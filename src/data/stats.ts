@@ -47,14 +47,14 @@ const network: Stat[] = [
   {
     type: "value",
     field: "in",
-    query: `node_network_receive_bytes_total`,
-    refine: (data) => Math.round(data / 1000000) + " mb",
+    query: `rate(node_network_receive_bytes_total{device="wlan0"}[1m]) * 60`,
+    refine: (data) => Math.round(data / 1000) + " kb",
   },
   {
     type: "value",
     field: "out",
-    query: `node_network_transmit_bytes_total`,
-    refine: (data) => Math.round(data / 1000000) + " mb",
+    query: `rate(node_network_transmit_bytes_total{device="wlan0"}[1m]) * 60`,
+    refine: (data) => Math.round(data / 1000) + " kb",
   },
 ];
 
