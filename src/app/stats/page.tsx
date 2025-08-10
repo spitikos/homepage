@@ -1,5 +1,5 @@
-const Stats = () => {
+const Page = () => {
   return null;
 };
 
-export default Stats;
+export default Page;
