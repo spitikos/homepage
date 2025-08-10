@@ -33,7 +33,7 @@ const Chart = ({ stat }: { stat: Stat }) => {
   const chartConfig = {
     chart: {
       label: stat.field.toUpperCase(),
-      color: "var(--color-primary)",
+      color: "var(--color-secondary)",
     },
   } satisfies ChartConfig;
 
