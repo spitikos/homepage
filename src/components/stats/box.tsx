@@ -17,7 +17,7 @@ const StatsBox = memo(({ title, stats }: StatsBoxProps) => {
   const { setSelectedStat } = useContext(StatsContext);
 
   return (
-    <div className="**:leading-none p-5 not-last:border-r *:w-full">
+    <div className="**:leading-none p-5 not-last:border-r *:w-full overflow-hidden">
       <h3 className="font-normal mb-4">{title.toUpperCase()}</h3>
 
       <div className="relative">

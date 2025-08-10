@@ -11,7 +11,7 @@ import { Stat } from "@/lib/prometheus/schema";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { useContext } from "react";
-import { Area, AreaChart } from "recharts";
+import { Line, LineChart, YAxis } from "recharts";
 
 dayjs.extend(relativeTime);
 
@@ -39,12 +39,7 @@ const Chart = ({ stat }: { stat: Stat }) => {
 
   return (
     <ChartContainer config={chartConfig} className="w-full h-[50vh]">
-      <AreaChart accessibilityLayer data={values}>
-        {/*<CartesianGrid
-          vertical={false}
-          syncWithTicks={true}
-          stroke="var(--color-tertiary)"
-        />*/}
+      <LineChart accessibilityLayer data={values}>
         <ChartTooltip
           cursor={false}
           isAnimationActive={true}
@@ -74,31 +69,20 @@ const Chart = ({ stat }: { stat: Stat }) => {
             return null;
           }}
         />
-        <defs>
-          <linearGradient id="gradient" x1="0" y1="0" x2="0" y2="1">
-            <stop
-              offset="5%"
-              stopColor="var(--color-tertiary)"
-              stopOpacity={0.8}
-            />
-            <stop
-              offset="95%"
-              stopColor="var(--color-tertiary)"
-              stopOpacity={0}
-            />
-          </linearGradient>
-        </defs>
-        <Area
+
+        <YAxis
+          hide
+          domain={stat.displayType === "gauge" ? [0, 1] : undefined}
+        />
+        <Line
           dataKey="value"
           name={stat.field.toUpperCase()}
           type="natural"
           stroke="var(--color-chart)"
-          fill="url(#gradient)"
           strokeWidth={1}
-          stackId={1}
           dot={false}
         />
-      </AreaChart>
+      </LineChart>
     </ChartContainer>
   );
 };

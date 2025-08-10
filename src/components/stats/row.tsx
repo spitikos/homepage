@@ -52,13 +52,13 @@ const Value = (stat: Stat) => {
   }
 
   return (
-    <>
+    <span className="truncate">
       {stat.displayType === "gauge" ? (
         <Gauge percent={value} />
       ) : (
         displayValue.toString().toUpperCase()
       )}
-    </>
+    </span>
   );
 };
 
