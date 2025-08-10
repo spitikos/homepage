@@ -1,17 +1,26 @@
-import { PrometheusSchema } from "@/lib/schema";
+import { PrometheusSchema } from "@/lib/prometheus";
+import { Stat } from "@/lib/prometheus/schema";
 import { createFetch, createSchema } from "@better-fetch/fetch";
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import z from "zod";
 
 const BASE_URL = "https://prometheus.spitikos.dev/api/v1";
 const REFRESH_INTERVAL = 15 * 1000; // 15 seconds
 
 const querySchema = createSchema({
   "/query": {
-    query: PrometheusSchema.primitives.query,
+    query: z.object({
+      query: z.string(),
+    }),
     output: PrometheusSchema.vectorResponse,
   },
   "/query_range": {
-    query: PrometheusSchema.primitives.query,
+    query: z.object({
+      query: z.string(),
+      start: z.number(),
+      end: z.number(),
+      step: z.number(),
+    }),
     output: PrometheusSchema.matrixResponse,
   },
 });
@@ -25,76 +34,54 @@ const $fetch = createFetch({
   },
 });
 
-export type PrometheusMetric = {
-  metric: Record<string, string>;
-  value: [Date, number];
-};
+function usePrometheus({ query, range }: Stat) {
+  const now = Date.now();
 
-export type PrometheusMetricRange = {
-  metric: Record<string, string>;
-  values: [Date, number][];
-};
+  const instantFetch = () => $fetch("/query", { query: { query } });
+  const rangeFetch = () =>
+    $fetch("/query_range", {
+      query: {
+        query,
+        start: range ? range.start.getTime() / 1000 : now / 1000 - 3600 * 24,
+        end: range ? range.end.getTime() / 1000 : now / 1000,
+        step: 300,
+      },
+    });
 
-type UsePrometheusProps = {
-  query: string;
-  range?: {
-    start: Date;
-    end: Date;
-  };
-};
-
-function usePrometheus(props: Omit<UsePrometheusProps, "range">): {
-  data: PrometheusMetric[] | undefined;
-  error: Error | null;
-};
-
-function usePrometheus(props: Required<UsePrometheusProps>): {
-  data: PrometheusMetricRange[] | undefined;
-  error: Error | null;
-};
-
-function usePrometheus({ query, range }: UsePrometheusProps) {
-  const instantQuery = useQuery({
-    enabled: range === undefined,
+  const { data: instantData, error: instantError } = useSuspenseQuery({
     queryKey: ["prometheus", query],
-    queryFn: () => $fetch("/query", { query: { query } }),
+    queryFn: instantFetch,
     refetchInterval: REFRESH_INTERVAL,
+    select: (data) =>
+      data?.data.result.map(({ metric, value: [timestamp, value] }) => ({
+        labels: metric,
+        value: {
+          time: new Date(timestamp * 1000),
+          value: parseFloat(value),
+        },
+      }))[0],
   });
-  const rangeQuery = useQuery({
-    enabled: range !== undefined,
+  if (instantError) console.error(instantError);
+
+  const { data: rangeData, error: rangeError } = useSuspenseQuery({
     queryKey: ["prometheus", query, range],
-    queryFn: () => $fetch("/query_range", { query: { query } }),
-    refetchInterval: REFRESH_INTERVAL,
+    queryFn: rangeFetch,
+    refetchInterval: false,
+    select: (data) =>
+      data?.data.result.map(({ metric, values }) => ({
+        labels: metric,
+        values: values.map(([timestamp, value]) => ({
+          time: new Date(timestamp * 1000),
+          value: parseFloat(value),
+        })),
+      }))[0],
   });
+  if (rangeError) console.error(rangeError);
 
-  const instantResult = instantQuery.data?.data.result.map(
-    ({ metric, value: [timestamp, value] }) =>
-      ({
-        metric,
-        value: [new Date(timestamp * 1000), parseFloat(value)],
-      }) satisfies PrometheusMetric,
-  );
-
-  const rangeResult = rangeQuery.data?.data.result.map(
-    ({ metric, values }) =>
-      ({
-        metric,
-        values: values.map(([timestamp, value]) => [
-          new Date(timestamp * 1000),
-          parseFloat(value),
-        ]),
-      }) satisfies PrometheusMetricRange,
-  );
-
-  return !!range
-    ? {
-        data: rangeResult,
-        error: rangeQuery.error,
-      }
-    : {
-        data: instantResult,
-        error: instantQuery.error,
-      };
+  return {
+    instant: instantData,
+    range: rangeData,
+  };
 }
 
 export default usePrometheus;

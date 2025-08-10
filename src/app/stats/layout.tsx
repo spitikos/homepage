@@ -1,17 +1,20 @@
+import { StatsProvider } from "@/contexts";
 import { ReactNode } from "react";
 
 const StatsLayout = ({
-  children,
-  summary,
+  current,
+  chart,
 }: {
-  children: Readonly<ReactNode>;
-  summary: Readonly<ReactNode>;
+  current: Readonly<ReactNode>;
+  chart: Readonly<ReactNode>;
 }) => {
   return (
-    <>
-      {summary}
-      {children}
-    </>
+    <main className="flex flex-col justify-between">
+      <StatsProvider>
+        <section>{current}</section>
+        <section>{chart}</section>
+      </StatsProvider>
+    </main>
   );
 };
 

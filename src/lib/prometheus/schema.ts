@@ -50,10 +50,38 @@ const stringResponse = z.object({
   }),
 });
 
-type VectorResponse = z.infer<typeof vectorResponse>;
-type MatrixResponse = z.infer<typeof matrixResponse>;
-type ScalarResponse = z.infer<typeof scalarResponse>;
-type StringResponse = z.infer<typeof stringResponse>;
+type Vector = {
+  labels: Record<string, string>;
+  value: {
+    time: Date;
+    value: number;
+  };
+};
+
+type Matrix = {
+  labels: Record<string, string>;
+  values: {
+    time: Date;
+    value: number;
+  }[];
+};
+
+type Stat = {
+  field: string;
+  query: string;
+  displayType?: "literal" | "gauge";
+  range?: {
+    start: Date;
+    end: Date;
+  };
+} & (
+  | { type: "label"; label: string; refine?: (data: string) => string }
+  | {
+      type: "value";
+      label?: undefined;
+      refine?: (data: number) => number | string;
+    }
+);
 
 export {
   matrixResponse,
@@ -62,4 +90,4 @@ export {
   stringResponse,
   vectorResponse,
 };
-export type { MatrixResponse, ScalarResponse, StringResponse, VectorResponse };
+export type { Matrix, Stat, Vector };

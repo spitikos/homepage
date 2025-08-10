@@ -1,6 +1,7 @@
 import { Header } from "@/components/nav";
 import { Providers } from "@/components/providers";
 import { Metadata } from "next";
+import { ReactNode } from "react";
 import { ppNeueMontreal, ppNeueMontrealMono } from "./_fonts/fonts";
 import "./globals.css";
 
@@ -12,17 +13,17 @@ export const metadata: Metadata = {
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: ReactNode;
 }>) {
   return (
     <html lang="en">
       <body
-        className={`${ppNeueMontreal.variable} ${ppNeueMontrealMono.variable} antialiased min-h-svh`}
+        className={`${ppNeueMontreal.variable} ${ppNeueMontrealMono.variable} antialiased [&_main]:min-h-svh [&_main]:pt-12`}
       >
         <Providers>
           <div className="bg-noise" />
           <Header />
-          <main className="pt-12">{children}</main>
+          {children}
         </Providers>
       </body>
     </html>

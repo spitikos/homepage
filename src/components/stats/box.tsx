@@ -1,14 +1,10 @@
 "use client";
 
-import { IconLoader2 } from "@tabler/icons-react";
+import { StatsContext } from "@/contexts";
+import { Stat } from "@/lib/prometheus/schema";
 import { motion } from "motion/react";
-import { ComponentProps, memo, useState } from "react";
-
-type Stat = {
-  field: string;
-  type?: "literal" | "gauge";
-  value: string | number | bigint | undefined | null;
-};
+import { memo, useContext, useState } from "react";
+import StatRow from "./row";
 
 type StatsBoxProps = {
   title: string;
@@ -18,6 +14,7 @@ type StatsBoxProps = {
 const StatsBox = memo(({ title, stats }: StatsBoxProps) => {
   const [highlightPos, setHighlightPos] = useState(-1);
   const [showHighlight, setShowHighlight] = useState(false);
+  const { setSelectedStat } = useContext(StatsContext);
 
   return (
     <div className="**:leading-none p-5 not-last:border-r *:w-full">
@@ -49,11 +46,12 @@ const StatsBox = memo(({ title, stats }: StatsBoxProps) => {
             {stats.map((stat, i) => (
               <StatRow
                 key={i}
-                {...stat}
+                stat={stat}
                 onMouseEnter={() => {
                   setHighlightPos(i);
                   setShowHighlight(true);
                 }}
+                onClick={() => setSelectedStat(stat)}
                 onMouseLeave={() => setShowHighlight(false)}
               />
             ))}
@@ -66,46 +64,3 @@ const StatsBox = memo(({ title, stats }: StatsBoxProps) => {
 StatsBox.displayName = "StatsBox";
 
 export default StatsBox;
-
-const StatRow = memo(
-  ({
-    field,
-    value,
-    type = "literal",
-    ...props
-  }: Stat & ComponentProps<"tr">) => {
-    const isGauge =
-      type === "gauge" && typeof value === "number" && value >= 0 && value <= 1;
-
-    return (
-      <tr {...props} className="*:w-1/2 cursor-pointer">
-        <td className="text-left text-secondary">{field.toUpperCase()}</td>
-        <td className="text-right relative">
-          {isGauge ? (
-            <Gauge percent={value} />
-          ) : (
-            (value?.toString().toUpperCase() ?? (
-              <IconLoader2
-                size={14}
-                className="text-secondary animate-spin absolute right-0 top-1/2 -translate-y-1/2"
-              />
-            ))
-          )}
-        </td>
-      </tr>
-    );
-  },
-);
-StatRow.displayName = "StatRow";
-
-const Gauge = ({ percent }: { percent: number }) => {
-  return (
-    <span className="h-1 bg-tertiary w-full block relative">
-      <motion.span
-        animate={{ scaleX: percent }}
-        transition={{ duration: 0.3, ease: "circOut" }}
-        className="h-1 bg-primary w-full origin-left block"
-      />
-    </span>
-  );
-};
