@@ -23,7 +23,7 @@ const Highlight = ({ children, padding }: HighlightProps) => {
   if (!isValidElement(child)) return children;
 
   return cloneElement(child, {
-    // @ts-ignore
+    // @ts-expect-error
     ref,
     onMouseEnter: () => {
       setElement(ref);
