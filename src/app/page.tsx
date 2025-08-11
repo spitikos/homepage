@@ -1,7 +1,7 @@
 "use client";
 
 import { Highlight } from "@/components/highlight";
-import { AnimatePresence, motion } from "motion/react";
+import { motion } from "motion/react";
 import { useState } from "react";
 
 const ascii = [
@@ -65,30 +65,26 @@ export default function Home() {
               onHoverEnd={() => setHoveredIndex(-1)}
               className="aspect-square flex items-center cursor-default justify-center"
             >
-              <AnimatePresence>
-                {i === hoveredIndex && (
-                  <motion.span
-                    initial={{
-                      opacity: 0,
-                    }}
-                    animate={{
-                      opacity: 1,
-                      transition: {
-                        duration: 0,
-                      },
-                    }}
-                    exit={{
-                      opacity: 0,
-                      transition: {
-                        duration: 2,
-                      },
-                    }}
-                    className="text-secondary"
-                  >
-                    {ascii[Math.round(Math.random() * ascii.length)]}
-                  </motion.span>
-                )}
-              </AnimatePresence>
+              <motion.span
+                animate={
+                  i === hoveredIndex
+                    ? {
+                        opacity: 1,
+                        transition: {
+                          duration: 0,
+                        },
+                      }
+                    : {
+                        opacity: 0,
+                        transition: {
+                          duration: 1,
+                        },
+                      }
+                }
+                className="opacity-0"
+              >
+                {ascii[Math.round(Math.random() * ascii.length)]}
+              </motion.span>
             </motion.div>
           </Highlight>
         ))}

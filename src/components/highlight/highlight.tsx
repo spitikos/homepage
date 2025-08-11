@@ -23,7 +23,7 @@ const Highlight = ({ children, padding }: HighlightProps) => {
   if (!isValidElement(child)) return children;
 
   return cloneElement(child, {
-    // @ts-expect-error
+    // @ts-expect-error ts doesn't know if ref can be passed
     ref,
     onMouseEnter: () => {
       setElement(ref);
