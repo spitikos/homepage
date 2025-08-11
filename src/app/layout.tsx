@@ -1,8 +1,8 @@
 import { Nav } from "@/components/nav";
 import { Providers } from "@/components/providers";
+import { ppNeueMontreal, ppNeueMontrealMono } from "@/lib/fonts";
 import { Metadata } from "next";
 import { ReactNode } from "react";
-import { ppNeueMontreal, ppNeueMontrealMono } from "./_fonts/fonts";
 import "./globals.css";
 
 export const metadata: Metadata = {

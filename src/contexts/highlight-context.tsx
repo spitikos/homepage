@@ -86,11 +86,9 @@ export const HighlightProvider = ({ children }: HighlightProviderProps) => {
           duration: 0.1,
           ease: "circOut",
         }}
-        className="absolute bg-highlight -z-10 rounded"
+        className="absolute bg-highlight -z-10 rounded-sm"
       />
       {children}
     </HighlightContext.Provider>
   );
 };
-
-
