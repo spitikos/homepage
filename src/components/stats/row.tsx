@@ -24,8 +24,8 @@ const StatRow = memo(({ stat, ...props }: StatRowProps) => {
     </tr>
   );
 });
-
 StatRow.displayName = "StatRow";
+
 export default StatRow;
 
 const Value = memo((stat: Stat) => {
@@ -60,6 +60,7 @@ const Value = memo((stat: Stat) => {
     </span>
   );
 });
+Value.displayName = "Value";
 
 const Gauge = ({ percent }: { percent: number }) => {
   if (percent < 0 || percent > 1)
