@@ -7,7 +7,7 @@ const Nav = () => {
   return (
     <>
       <Header />
-      <Sidebar />
+      {/*<Sidebar />*/}
     </>
   );
 };

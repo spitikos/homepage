@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
+import { usePathname } from "next/navigation";
 import {
   createContext,
   type Dispatch,
@@ -43,6 +44,7 @@ type HighlightProviderProps = {
 };
 
 export const HighlightProvider = ({ children }: HighlightProviderProps) => {
+  const path = usePathname();
   const [show, setShow] = useState(false);
   const [element, setElement] = useState<Element | null>(null);
   const [padding, setPadding] = useState<Padding>({ x: 0, y: 0 });
@@ -68,13 +70,18 @@ export const HighlightProvider = ({ children }: HighlightProviderProps) => {
     } else {
       hideTimeout = setTimeout(() => {
         setShow(false);
-      }, 300);
+      }, 100);
     }
 
     return () => {
       clearTimeout(hideTimeout);
     };
   }, [element, padding.x, padding.y]);
+
+  useEffect(() => {
+    setElement(null);
+    setShow(false);
+  }, [path]);
 
   return (
     <HighlightContext.Provider

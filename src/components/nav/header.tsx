@@ -9,9 +9,9 @@ const Header = () => {
   const paths = pathname.split("/").slice(1);
 
   return (
-    <header className="fixed top-0 left-16 w-[calc(100svw-64px)] flex items-center px-5 h-12 text-sm border-b">
+    <header className="fixed top-0 left-0 w-svw flex items-center px-5 h-12 text-sm border-b">
       <div className="flex">
-        <span>SPITIKOS</span>
+        <Link href="/">SPITIKOS</Link>
         {paths.map((path, i) => (
           <Fragment key={i}>
             <span className="mx-2 text-secondary">/</span>

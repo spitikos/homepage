@@ -1,6 +1,7 @@
 "use client";
 
 import { HighlightProvider } from "@/contexts";
+import CONFIG from "@/lib/config";
 import { TransportProvider } from "@connectrpc/connect-query";
 import { createConnectTransport } from "@connectrpc/connect-web";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -8,7 +9,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { type ReactNode } from "react";
 
 const transport = createConnectTransport({
-  baseUrl: "https://api.spitikos.dev:443",
+  baseUrl: CONFIG.API.URL,
   useBinaryFormat: true,
 });
 

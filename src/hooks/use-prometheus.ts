@@ -2,8 +2,8 @@
 
 import { type Stat } from "@/lib/prometheus";
 import {
-  PrometheusProxyService,
-  type QueryResponse,
+    PrometheusProxyService,
+    type QueryResponse,
 } from "@buf/spitikos_api.bufbuild_es/prometheusproxy/v1/service_pb";
 import { timestampFromDate } from "@bufbuild/protobuf/wkt";
 import { createClient } from "@connectrpc/connect";

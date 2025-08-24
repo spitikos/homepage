@@ -1,4 +1,5 @@
 import { FlatCompat } from "@eslint/eslintrc";
+import reactHooks from 'eslint-plugin-react-hooks';
 import tseslint from "typescript-eslint";
 
 const compat = new FlatCompat({
@@ -16,6 +17,7 @@ export default tseslint.config(
       ...tseslint.configs.recommended,
       ...tseslint.configs.recommendedTypeChecked,
       ...tseslint.configs.stylisticTypeChecked,
+      ...reactHooks.configs['recommended-latest'],
     ],
     rules: {
       "@typescript-eslint/array-type": "off",

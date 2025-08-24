@@ -1,4 +1,5 @@
-import { PrometheusConfig, type Stat } from "@/lib/prometheus";
+import CONFIG from "@/lib/config";
+import { type Stat } from "@/lib/prometheus";
 
 const host: Stat[] = [
   {
@@ -26,19 +27,19 @@ const resource: Stat[] = [
     type: "value",
     field: "cpu",
     displayType: "gauge",
-    query: `avg(1 - rate(node_cpu_seconds_total{mode="idle"}[${PrometheusConfig.AVG_OVER}]))`,
+    query: `avg(1 - rate(node_cpu_seconds_total{mode="idle"}[${CONFIG.STATS.AVG_OVER}]))`,
   },
   {
     type: "value",
     field: "memory",
     displayType: "gauge",
-    query: `avg_over_time(((node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) / node_memory_MemTotal_bytes)[${PrometheusConfig.AVG_OVER}:])`,
+    query: `avg_over_time(((node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) / node_memory_MemTotal_bytes)[${CONFIG.STATS.AVG_OVER}:])`,
   },
   {
     type: "value",
     field: "disk",
     displayType: "gauge",
-    query: `avg_over_time(((node_filesystem_size_bytes{mountpoint="/"} - node_filesystem_free_bytes{mountpoint="/"}) / node_filesystem_size_bytes{mountpoint="/"})[${PrometheusConfig.AVG_OVER}:])`,
+    query: `avg_over_time(((node_filesystem_size_bytes{mountpoint="/"} - node_filesystem_free_bytes{mountpoint="/"}) / node_filesystem_size_bytes{mountpoint="/"})[${CONFIG.STATS.AVG_OVER}:])`,
   },
 ];
 
@@ -46,13 +47,13 @@ const network: Stat[] = [
   {
     type: "value",
     field: "in",
-    query: `rate(node_network_receive_bytes_total{device="wlan0"}[${PrometheusConfig.AVG_OVER}])`,
+    query: `rate(node_network_receive_bytes_total{device="wlan0"}[${CONFIG.STATS.AVG_OVER}])`,
     refine: (data) => Math.round((data * 8) / 1000) + " kbps",
   },
   {
     type: "value",
     field: "out",
-    query: `rate(node_network_transmit_bytes_total{device="wlan0"}[${PrometheusConfig.AVG_OVER}])`,
+    query: `rate(node_network_transmit_bytes_total{device="wlan0"}[${CONFIG.STATS.AVG_OVER}])`,
     refine: (data) => Math.round((data * 8) / 1000) + " kbps",
   },
 ];

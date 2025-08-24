@@ -18,7 +18,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${ppNeueMontreal.variable} ${ppNeueMontrealMono.variable} antialiased [&_main]:min-h-svh [&_main]:pt-12 [&_main]:pl-16 overflow-x-hidden`}
+        className={`${ppNeueMontreal.variable} ${ppNeueMontrealMono.variable} antialiased [&_main]:min-h-svh [&_main]:pt-12 overflow-x-hidden`}
       >
         <Providers>
           <div className="bg-noise fixed size-full top-0 left-0" />

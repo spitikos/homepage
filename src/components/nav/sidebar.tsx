@@ -13,8 +13,14 @@ const navData = [
 const Sidebar = () => {
   return (
     <nav className="fixed top-0 left-0 w-16 h-svh border-r flex flex-col py-1 items-center gap-3">
-      <Link href="/" className="relative rounded overflow-hidden">
-        <Image src="/logo.svg" alt="logo" width={32} height={32} />
+      <Link href="/" className="relative rounded overflow-hidden size-8">
+        <Image
+          src="/logo.svg"
+          alt="logo"
+          width={32}
+          height={32}
+          className="absolute -z-100"
+        />
       </Link>
       {navData.map((item) => (
         <Highlight key={item.link}>
