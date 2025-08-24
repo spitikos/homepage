@@ -75,6 +75,8 @@ const StatChart = memo((stat: Stat) => {
           dataKey="value"
           name={stat.field.toUpperCase()}
           type="linear"
+          animationEasing="ease-out"
+          animationDuration={500}
           stroke="var(--color-chart)"
           strokeWidth={1}
           dot={false}
