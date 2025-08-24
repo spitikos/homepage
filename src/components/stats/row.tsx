@@ -9,7 +9,7 @@ import { ComponentProps, memo, useContext } from "react";
 
 type StatRowProps = { stat: Stat } & Omit<ComponentProps<"tr">, "onClick">;
 
-const StatRow = ({ stat, ...props }: StatRowProps) => {
+const StatRow = memo(({ stat, ...props }: StatRowProps) => {
   const { setSelectedStat } = useContext(StatsContext);
   return (
     <tr
@@ -23,8 +23,9 @@ const StatRow = ({ stat, ...props }: StatRowProps) => {
       </td>
     </tr>
   );
-};
+});
 
+StatRow.displayName = "StatRow";
 export default StatRow;
 
 const Value = memo((stat: Stat) => {
