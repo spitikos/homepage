@@ -1,13 +1,13 @@
 "use client";
 
 import {
-  ChartConfig,
+  type ChartConfig,
   ChartContainer,
   ChartTooltip,
 } from "@/components/ui/chart";
 import { usePrometheus } from "@/hooks";
-import { Stat } from "@/lib/prometheus";
-import { Value } from "@buf/spitikos_api.bufbuild_es/prometheusproxy/v1/types_pb";
+import { type Stat } from "@/lib/prometheus";
+import { type Value } from "@buf/spitikos_api.bufbuild_es/prometheusproxy/v1/types_pb";
 import { timestampDate } from "@bufbuild/protobuf/wkt";
 
 import dayjs from "dayjs";
@@ -42,8 +42,8 @@ const StatChart = memo((stat: Stat) => {
           isAnimationActive={true}
           animationDuration={100}
           content={({ active, payload }) => {
-            if (active && payload && payload.length) {
-              const data = payload[0].payload as Value;
+            if (active && payload?.length) {
+              const data = payload[0]?.payload as Value;
               return (
                 <div className="bg-background/30 backdrop-blur-md border rounded-md p-2.5 w-40 space-y-1 overflow-hidden">
                   <p className="text-xs text-secondary">
@@ -54,9 +54,9 @@ const StatChart = memo((stat: Stat) => {
                   <div className="text-xs inline-flex justify-between gap-2 w-full">
                     <span>{stat.field.toUpperCase()}</span>
                     <span className="truncate">
-                      {(stat.refine && payload[0].value
-                        ? stat.refine(payload[0].value as never)
-                        : payload[0].value
+                      {(stat.refine && payload[0]?.value
+                        ? stat.refine(payload[0]?.value as never)
+                        : payload[0]?.value
                       )
                         ?.toString()
                         .toUpperCase()}

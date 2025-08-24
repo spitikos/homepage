@@ -1,7 +1,7 @@
 "use client";
 
 import { Highlight } from "@/components/highlight";
-import { Stat } from "@/lib/prometheus";
+import { type Stat } from "@/lib/prometheus";
 import { memo } from "react";
 import StatRow from "./row";
 

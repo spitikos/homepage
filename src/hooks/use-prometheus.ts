@@ -1,14 +1,10 @@
 "use client";
 
-import { Stat } from "@/lib/prometheus";
+import { type Stat } from "@/lib/prometheus";
 import {
   PrometheusProxyService,
-  QueryResponse,
+  type QueryResponse,
 } from "@buf/spitikos_api.bufbuild_es/prometheusproxy/v1/service_pb";
-import {
-  Sample,
-  SampleStream,
-} from "@buf/spitikos_api.bufbuild_es/prometheusproxy/v1/types_pb";
 import { timestampFromDate } from "@bufbuild/protobuf/wkt";
 import { createClient } from "@connectrpc/connect";
 import { useQuery, useTransport } from "@connectrpc/connect-query";
@@ -46,7 +42,7 @@ const usePrometheus = ({ stat, queryType }: UsePrometheusProps) => {
     let active = true;
     const stream = client.streamQuery({ query: stat.query });
 
-    (async () => {
+    void (async () => {
       for await (const msg of stream) {
         if (!active) break;
         setInstantMessage(msg);
@@ -60,14 +56,12 @@ const usePrometheus = ({ stat, queryType }: UsePrometheusProps) => {
 
   if (queryType === "instant") {
     const metric = instantMessage?.data?.[0]?.metric ?? null;
-    const value =
-      (instantMessage?.data?.[0] as Sample | undefined)?.value?.value ?? null;
+    const value = instantMessage?.data?.[0]?.value?.value ?? null;
     return { labels: metric, value };
   }
 
   const metric = rangeData?.data?.[0]?.metric ?? null;
-  const values =
-    (rangeData?.data?.[0] as SampleStream | undefined)?.values ?? null;
+  const values = rangeData?.data?.[0]?.values ?? null;
   return { labels: metric, values };
 };
 

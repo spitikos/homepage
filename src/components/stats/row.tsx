@@ -1,16 +1,16 @@
 "use client";
 
-import { StatsContext } from "@/contexts";
 import { usePrometheus } from "@/hooks";
-import { Stat } from "@/lib/prometheus";
+import { useSelectedStat } from "@/hooks/use-selected-stat";
+import { type Stat } from "@/lib/prometheus";
 import { IconLoader2 } from "@tabler/icons-react";
 import { motion } from "motion/react";
-import { ComponentProps, memo, useContext } from "react";
+import { type ComponentProps, memo } from "react";
 
 type StatRowProps = { stat: Stat } & Omit<ComponentProps<"tr">, "onClick">;
 
 const StatRow = memo(({ stat, ...props }: StatRowProps) => {
-  const { setSelectedStat } = useContext(StatsContext);
+  const { setSelectedStat } = useSelectedStat();
   return (
     <tr
       {...props}
@@ -39,9 +39,8 @@ const Value = memo((stat: Stat) => {
 
   switch (stat.type) {
     case "label":
-      displayValue = stat.refine
-        ? stat.refine(labels[stat.label])
-        : (labels[stat.label] ?? "-");
+      const label = labels[stat.label];
+      displayValue = stat.refine && label ? stat.refine(label) : "-";
       break;
     case "value":
       displayValue = stat.refine

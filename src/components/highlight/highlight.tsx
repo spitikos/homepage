@@ -5,7 +5,7 @@ import {
   Children,
   cloneElement,
   isValidElement,
-  ReactNode,
+  type ReactNode,
   useContext,
   useRef,
 } from "react";

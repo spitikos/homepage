@@ -1,5 +1,2 @@
-export {
-  HighlightContext,
-  HighlightProvider,
-} from "@/contexts/highlight-context";
-export { StatsContext, StatsProvider } from "@/contexts/stats-context";
+export * from "./highlight-context";
+export * from "./selected-stat-context";

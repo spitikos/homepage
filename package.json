@@ -3,10 +3,17 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
     "build": "next build",
+    "check": "next lint && tsc --noEmit",
+    "dev": "next dev --turbopack",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,mdx}\" --cache",
+    "format:write": "prettier --write \"**/*.{ts,tsx,js,jsx,mdx}\" --cache",
+    "postinstall": "prisma generate",
+    "lint": "next lint",
+    "lint:fix": "next lint --fix",
+    "preview": "next build && next start",
     "start": "next start",
-    "lint": "next lint"
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@better-fetch/fetch": "^1.1.18",
@@ -47,6 +54,7 @@
     "@typescript-eslint/parser": "^8.39.0",
     "eslint": "^9.32.0",
     "eslint-config-next": "15.4.4",
+    "eslint-plugin-react-hooks": "^5.2.0",
     "tailwindcss": "^4.1.11",
     "tw-animate-css": "^1.3.6",
     "typescript": "^5.9.2",

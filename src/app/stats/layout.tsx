@@ -1,5 +1,5 @@
-import { StatsProvider } from "@/contexts";
-import { ReactNode } from "react";
+import { SelectedStatProvider } from "@/contexts";
+import { type ReactNode } from "react";
 
 const StatsLayout = ({
   current,
@@ -10,10 +10,10 @@ const StatsLayout = ({
 }) => {
   return (
     <main className="*:border-b">
-      <StatsProvider>
+      <SelectedStatProvider>
         <section>{current}</section>
         <section>{chart}</section>
-      </StatsProvider>
+      </SelectedStatProvider>
     </main>
   );
 };

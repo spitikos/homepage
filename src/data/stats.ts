@@ -1,5 +1,4 @@
-import { PrometheusConfig } from "@/lib/prometheus";
-import { Stat } from "@/lib/prometheus/types";
+import { PrometheusConfig, type Stat } from "@/lib/prometheus";
 
 const host: Stat[] = [
   {

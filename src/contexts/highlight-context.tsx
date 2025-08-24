@@ -3,10 +3,10 @@
 import { motion } from "motion/react";
 import {
   createContext,
-  Dispatch,
-  ReactNode,
-  RefObject,
-  SetStateAction,
+  type Dispatch,
+  type ReactNode,
+  type RefObject,
+  type SetStateAction,
   useEffect,
   useState,
 } from "react";
@@ -25,11 +25,17 @@ type HighlightContextType = {
 
 export const HighlightContext = createContext<HighlightContextType>({
   show: false,
-  setShow: () => {},
+  setShow: () => {
+    /* */
+  },
   element: null,
-  setElement: () => {},
+  setElement: () => {
+    /* */
+  },
   padding: { x: 0, y: 0 },
-  setPadding: () => {},
+  setPadding: () => {
+    /* */
+  },
 });
 
 type HighlightProviderProps = {
@@ -68,7 +74,7 @@ export const HighlightProvider = ({ children }: HighlightProviderProps) => {
     return () => {
       clearTimeout(hideTimeout);
     };
-  }, [padding.x, padding.y]);
+  }, [element, padding.x, padding.y]);
 
   return (
     <HighlightContext.Provider
