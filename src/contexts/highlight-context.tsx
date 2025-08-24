@@ -68,7 +68,7 @@ export const HighlightProvider = ({ children }: HighlightProviderProps) => {
     return () => {
       clearTimeout(hideTimeout);
     };
-  }, [element]);
+  }, [padding.x, padding.y]);
 
   return (
     <HighlightContext.Provider

@@ -56,7 +56,7 @@ const usePrometheus = ({ stat, queryType }: UsePrometheusProps) => {
     return () => {
       active = false;
     };
-  }, [stat.query, queryType]);
+  }, [client, stat.query, queryType]);
 
   if (queryType === "instant") {
     const metric = instantMessage?.data?.[0]?.metric ?? null;
