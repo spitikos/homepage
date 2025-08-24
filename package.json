@@ -1,5 +1,5 @@
 {
-  "name": "pi-homepage",
+  "name": "spitikos",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -17,7 +17,6 @@
   "dependencies": {
     "@better-fetch/fetch": "^1.1.18",
     "@buf/spitikos_api.bufbuild_es": "2.7.0-20250824170143-f46f2b138594.1",
-    "@buf/spitikos_api.connectrpc_query-es": "2.1.1-20250824170143-f46f2b138594.1",
     "@bufbuild/protobuf": "^2.7.0",
     "@connectrpc/connect": "^2.0.4",
     "@connectrpc/connect-node": "^2.0.4",
@@ -29,7 +28,6 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "dayjs": "^1.11.13",
-    "effect": "^3.17.6",
     "google-protobuf": "^3.21.4",
     "lucide-react": "^0.539.0",
     "motion": "^12.23.12",
@@ -38,8 +36,7 @@
     "react-dom": "19.1.0",
     "recharts": "2.15.4",
     "tailwind-merge": "^3.3.1",
-    "timestamp_pb": "link:google-protobuf/google/protobuf/timestamp_pb",
-    "zod": "^4.0.15"
+    "timestamp_pb": "link:google-protobuf/google/protobuf/timestamp_pb"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",
@@ -51,6 +48,7 @@
     "@types/react": "^19.1.9",
     "@types/react-dom": "^19.1.7",
     "@typescript-eslint/parser": "^8.39.0",
+    "depcheck": "^1.4.7",
     "eslint": "^9.32.0",
     "eslint-config-next": "15.4.4",
     "eslint-plugin-react-hooks": "^5.2.0",
