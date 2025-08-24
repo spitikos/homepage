@@ -17,7 +17,6 @@ export default function Home() {
           SPITIKOS
         </h1>
         <p>BY ETHAN LEE</p>
-        {/*<Image src="/logo.svg" alt="logo" width={100} height={100} />*/}
       </div>
     </main>
   );

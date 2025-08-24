@@ -1,9 +1,8 @@
 "use client";
 
 import { Highlight } from "@/components/highlight";
-import { StatsContext } from "@/contexts";
-import { Stat } from "@/lib/prometheus/schema";
-import { memo, useContext } from "react";
+import { Stat } from "@/lib/prometheus";
+import { memo } from "react";
 import StatRow from "./row";
 
 type StatsBoxProps = {
@@ -12,8 +11,6 @@ type StatsBoxProps = {
 };
 
 const StatsBox = memo(({ title, stats }: StatsBoxProps) => {
-  const { setSelectedStat } = useContext(StatsContext);
-
   return (
     <div className="**:leading-none p-5 not-last:border-r *:w-full overflow-hidden">
       <h3 className="font-normal mb-4">{title.toUpperCase()}</h3>
@@ -28,7 +25,7 @@ const StatsBox = memo(({ title, stats }: StatsBoxProps) => {
         <tbody className="[&_tr]:h-6">
           {stats.map((stat, i) => (
             <Highlight key={i} padding={{ x: 8 }}>
-              <StatRow stat={stat} onClick={() => setSelectedStat(stat)} />
+              <StatRow stat={stat} />
             </Highlight>
           ))}
         </tbody>

@@ -1,5 +1,5 @@
 import { PrometheusConfig } from "@/lib/prometheus";
-import { Stat } from "@/lib/prometheus/schema";
+import { Stat } from "@/lib/prometheus/types";
 
 const host: Stat[] = [
   {

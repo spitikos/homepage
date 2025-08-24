@@ -18,7 +18,7 @@ jobs:
       packages: write
     uses: spitikos/spitikos/.github/workflows/release.yaml@main
     with:
-      chart_path: charts/homepage
+      chart_path: '["charts/homepage"]'
       image_name: homepage
       image_tag: ${{ github.sha }}
     secrets: inherit

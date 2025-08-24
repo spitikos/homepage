@@ -1,88 +1,74 @@
-import { PrometheusConfig, PrometheusSchema } from "@/lib/prometheus";
-import { Stat } from "@/lib/prometheus/schema";
-import { createFetch, createSchema } from "@better-fetch/fetch";
-import { useSuspenseQuery } from "@tanstack/react-query";
-import z from "zod";
+"use client";
 
-const querySchema = createSchema({
-  "/query": {
-    query: z.object({
-      query: z.string(),
-    }),
-    output: PrometheusSchema.vectorResponse,
-  },
-  "/query_range": {
-    query: z.object({
-      query: z.string(),
-      start: z.number(),
-      end: z.number(),
-      step: z.number(),
-    }),
-    output: PrometheusSchema.matrixResponse,
-  },
-});
+import { Stat } from "@/lib/prometheus";
+import {
+  PrometheusProxyService,
+  QueryResponse,
+} from "@buf/spitikos_api.bufbuild_es/prometheusproxy/v1/service_pb";
+import {
+  Sample,
+  SampleStream,
+} from "@buf/spitikos_api.bufbuild_es/prometheusproxy/v1/types_pb";
+import { timestampFromDate } from "@bufbuild/protobuf/wkt";
+import { createClient } from "@connectrpc/connect";
+import { useQuery, useTransport } from "@connectrpc/connect-query";
+import { useEffect, useState } from "react";
 
-const $fetch = createFetch({
-  baseURL: PrometheusConfig.BASE_URL,
-  schema: querySchema,
-  throw: true,
-  fetchOptions: {
-    cache: "no-store",
-  },
-});
+const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000); /* 24 hours ago */
+const since = timestampFromDate(yesterday);
 
-function usePrometheus({ query }: Stat) {
-  const { data: instantData, error: instantError } = useSuspenseQuery({
-    queryKey: ["prometheus", "instant", query],
-    queryFn: () => $fetch("/query", { query: { query } }),
-    refetchInterval: PrometheusConfig.REFRESH_INTERVAL,
-    staleTime: PrometheusConfig.REFRESH_INTERVAL,
-    select: (data) =>
-      data?.data.result.map(({ metric, value: [timestamp, value] }) => ({
-        labels: metric,
-        value: {
-          time: new Date(timestamp * 1000),
-          value: parseFloat(value),
-        },
-      }))[0],
-  });
-  if (instantError) console.error(instantError);
+type UsePrometheusProps = {
+  stat: Stat;
+  queryType: "instant" | "range";
+};
 
-  const { data: rangeData, error: rangeError } = useSuspenseQuery({
-    queryKey: ["prometheus", "range", query],
-    queryFn: () => {
-      const now = Math.floor(Date.now() / 1000);
-      const range = {
-        start: now - PrometheusConfig.RANGE_LENGTH,
-        end: now,
-      };
+const usePrometheus = ({ stat, queryType }: UsePrometheusProps) => {
+  const transport = useTransport();
+  const client = createClient(PrometheusProxyService, transport);
 
-      return $fetch("/query_range", {
-        query: {
-          query,
-          start: range.start,
-          end: range.end,
-          step: PrometheusConfig.RANGE_LENGTH / PrometheusConfig.RANGE_POINTS,
-        },
-      });
+  const { data: rangeData } = useQuery(
+    PrometheusProxyService.method.queryRange,
+    { query: stat.query, since },
+    {
+      enabled: queryType === "range",
+      refetchInterval: 60 * 1000 /* 1 minute */,
+      refetchIntervalInBackground: true,
     },
-    refetchInterval: PrometheusConfig.REFRESH_INTERVAL,
-    staleTime: PrometheusConfig.REFRESH_INTERVAL,
-    select: (data) =>
-      data?.data.result.map(({ metric, values }) => ({
-        labels: metric,
-        values: values.map(([timestamp, value]) => ({
-          time: new Date(timestamp * 1000),
-          value: parseFloat(value),
-        })),
-      }))[0],
-  });
-  if (rangeError) console.error(rangeError);
+  );
 
-  return {
-    instant: instantData,
-    range: rangeData,
-  };
-}
+  const [instantMessage, setInstantMessage] = useState<QueryResponse | null>(
+    null,
+  );
+
+  useEffect(() => {
+    if (queryType !== "instant") return;
+
+    let active = true;
+    const stream = client.streamQuery({ query: stat.query });
+
+    (async () => {
+      for await (const msg of stream) {
+        if (!active) break;
+        setInstantMessage(msg);
+      }
+    })();
+
+    return () => {
+      active = false;
+    };
+  }, [stat.query, queryType]);
+
+  if (queryType === "instant") {
+    const metric = instantMessage?.data?.[0]?.metric ?? null;
+    const value =
+      (instantMessage?.data?.[0] as Sample | undefined)?.value?.value ?? null;
+    return { labels: metric, value };
+  }
+
+  const metric = rangeData?.data?.[0]?.metric ?? null;
+  const values =
+    (rangeData?.data?.[0] as SampleStream | undefined)?.values ?? null;
+  return { labels: metric, values };
+};
 
 export default usePrometheus;

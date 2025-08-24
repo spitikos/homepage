@@ -6,13 +6,21 @@ import {
   ChartTooltip,
 } from "@/components/ui/chart";
 import { usePrometheus } from "@/hooks";
-import { Stat } from "@/lib/prometheus/schema";
+import { Stat } from "@/lib/prometheus";
+import { Value } from "@buf/spitikos_api.bufbuild_es/prometheusproxy/v1/types_pb";
+import { timestampDate } from "@bufbuild/protobuf/wkt";
+
 import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+import { memo } from "react";
 import { Line, LineChart, YAxis } from "recharts";
 
-const StatChart = (stat: Stat) => {
-  const { range } = usePrometheus(stat);
-  const { values } = range;
+dayjs.extend(relativeTime);
+
+const StatChart = memo((stat: Stat) => {
+  const { labels, values } = usePrometheus({ stat, queryType: "range" });
+
+  if (!labels || !values) return null;
 
   const chartConfig = {
     chart: {
@@ -28,22 +36,20 @@ const StatChart = (stat: Stat) => {
 
   return (
     <ChartContainer config={chartConfig} className="size-full">
-      <LineChart
-        accessibilityLayer
-        data={values}
-        margin={{ top: 20, bottom: 20 }}
-      >
+      <LineChart accessibilityLayer data={values}>
         <ChartTooltip
           cursor={false}
           isAnimationActive={true}
           animationDuration={100}
           content={({ active, payload }) => {
             if (active && payload && payload.length) {
-              const data = payload[0].payload;
+              const data = payload[0].payload as Value;
               return (
-                <div className="bg-background/30 backdrop-blur-md border rounded-md p-2.5 w-32 space-y-1 overflow-hidden">
+                <div className="bg-background/30 backdrop-blur-md border rounded-md p-2.5 w-40 space-y-1 overflow-hidden">
                   <p className="text-xs text-secondary">
-                    {dayjs(data.time).fromNow().toUpperCase()}
+                    {dayjs(timestampDate(data.timestamp!))
+                      .fromNow()
+                      .toUpperCase()}
                   </p>
                   <div className="text-xs inline-flex justify-between gap-2 w-full">
                     <span>{stat.field.toUpperCase()}</span>
@@ -68,7 +74,7 @@ const StatChart = (stat: Stat) => {
         <Line
           dataKey="value"
           name={stat.field.toUpperCase()}
-          type="natural"
+          type="linear"
           stroke="var(--color-chart)"
           strokeWidth={1}
           dot={false}
@@ -76,6 +82,7 @@ const StatChart = (stat: Stat) => {
       </LineChart>
     </ChartContainer>
   );
-};
+});
+StatChart.displayName = "StatChart";
 
 export default StatChart;
