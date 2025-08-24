@@ -19,9 +19,6 @@ type UsePrometheusProps = {
 };
 
 const usePrometheus = ({ stat, queryType }: UsePrometheusProps) => {
-  const transport = useTransport();
-  const client = createClient(PrometheusProxyService, transport);
-
   const { data: rangeData } = useQuery(
     PrometheusProxyService.method.queryRange,
     { query: stat.query, since },
@@ -33,7 +30,11 @@ const usePrometheus = ({ stat, queryType }: UsePrometheusProps) => {
   );
 
   const [instantData, setInstantData] = useState<QueryResponse | null>(null);
-
+  const transport = useTransport();
+  const client = useMemo(
+    () => createClient(PrometheusProxyService, transport),
+    [transport],
+  );
   const stream = useMemo(
     () => client.streamQuery({ query: stat.query }),
     [client, stat.query],
