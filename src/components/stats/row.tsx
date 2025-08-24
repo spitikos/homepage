@@ -40,7 +40,12 @@ const Value = memo((stat: Stat) => {
   switch (stat.type) {
     case "label":
       const label = labels[stat.label];
-      displayValue = stat.refine && label ? stat.refine(label) : "-";
+      if (!label) {
+        console.error(`Label ${stat.label} not found in labels:`, labels);
+        displayValue = "-";
+        break;
+      }
+      displayValue = stat.refine ? stat.refine(label) : label;
       break;
     case "value":
       displayValue = stat.refine

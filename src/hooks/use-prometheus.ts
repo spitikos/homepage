@@ -8,7 +8,7 @@ import {
 import { timestampFromDate } from "@bufbuild/protobuf/wkt";
 import { createClient } from "@connectrpc/connect";
 import { useQuery, useTransport } from "@connectrpc/connect-query";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000); /* 24 hours ago */
 const since = timestampFromDate(yesterday);
@@ -36,11 +36,15 @@ const usePrometheus = ({ stat, queryType }: UsePrometheusProps) => {
     null,
   );
 
+  const stream = useMemo(
+    () => client.streamQuery({ query: stat.query }),
+    [client, stat.query],
+  );
+
   useEffect(() => {
     if (queryType !== "instant") return;
 
     let active = true;
-    const stream = client.streamQuery({ query: stat.query });
 
     void (async () => {
       for await (const msg of stream) {
@@ -52,7 +56,7 @@ const usePrometheus = ({ stat, queryType }: UsePrometheusProps) => {
     return () => {
       active = false;
     };
-  }, [client, stat.query, queryType]);
+  }, [client, stream, stat.query, queryType]);
 
   if (queryType === "instant") {
     const metric = instantMessage?.data?.[0]?.metric ?? null;
