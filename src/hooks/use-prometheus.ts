@@ -32,9 +32,7 @@ const usePrometheus = ({ stat, queryType }: UsePrometheusProps) => {
     },
   );
 
-  const [instantMessage, setInstantMessage] = useState<QueryResponse | null>(
-    null,
-  );
+  const [instantData, setInstantData] = useState<QueryResponse | null>(null);
 
   const stream = useMemo(
     () => client.streamQuery({ query: stat.query }),
@@ -49,7 +47,7 @@ const usePrometheus = ({ stat, queryType }: UsePrometheusProps) => {
     void (async () => {
       for await (const msg of stream) {
         if (!active) break;
-        setInstantMessage(msg);
+        setInstantData(msg);
       }
     })();
 
@@ -59,14 +57,14 @@ const usePrometheus = ({ stat, queryType }: UsePrometheusProps) => {
   }, [client, stream, stat.query, queryType]);
 
   if (queryType === "instant") {
-    const metric = instantMessage?.data?.[0]?.metric ?? null;
-    const value = instantMessage?.data?.[0]?.value?.value ?? null;
-    return { labels: metric, value };
+    const labels = instantData?.data?.[0]?.metric ?? null;
+    const value = instantData?.data?.[0]?.value?.value ?? null;
+    return { labels, value };
   }
 
-  const metric = rangeData?.data?.[0]?.metric ?? null;
+  const labels = rangeData?.data?.[0]?.metric ?? null;
   const values = rangeData?.data?.[0]?.values ?? null;
-  return { labels: metric, values };
+  return { labels, values };
 };
 
 export default usePrometheus;
