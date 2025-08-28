@@ -2,9 +2,9 @@
 
 import { type Stat } from "@/lib/prometheus";
 import {
-    PrometheusProxyService,
-    type QueryResponse,
-} from "@buf/spitikos_api.bufbuild_es/prometheusproxy/v1/service_pb";
+  PrometheusService,
+  type StreamQueryResponse,
+} from "@buf/spitikos_api.bufbuild_es/prometheus/prometheus_pb";
 import { timestampFromDate } from "@bufbuild/protobuf/wkt";
 import { createClient } from "@connectrpc/connect";
 import { useQuery, useTransport } from "@connectrpc/connect-query";
@@ -20,7 +20,7 @@ type UsePrometheusProps = {
 
 const usePrometheus = ({ stat, queryType }: UsePrometheusProps) => {
   const { data: rangeData } = useQuery(
-    PrometheusProxyService.method.queryRange,
+    PrometheusService.method.queryRange,
     { query: stat.query, since },
     {
       enabled: queryType === "range",
@@ -29,10 +29,12 @@ const usePrometheus = ({ stat, queryType }: UsePrometheusProps) => {
     },
   );
 
-  const [instantData, setInstantData] = useState<QueryResponse | null>(null);
+  const [instantData, setInstantData] = useState<StreamQueryResponse | null>(
+    null,
+  );
   const transport = useTransport();
   const client = useMemo(
-    () => createClient(PrometheusProxyService, transport),
+    () => createClient(PrometheusService, transport),
     [transport],
   );
   const stream = useMemo(

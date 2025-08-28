@@ -1,28 +1,27 @@
-import { Nav } from "@/components/nav";
+import { SiteHeader } from "@/components/nav";
 import { Providers } from "@/components/providers";
 import { ppNeueMontreal, ppNeueMontrealMono } from "@/lib/fonts";
+import "@/styles/globals.css";
 import { type Metadata } from "next";
 import { type ReactNode } from "react";
-import "./globals.css";
 
 export const metadata: Metadata = {
   title: "spitikos",
   description: "k8s at home",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: ReactNode;
-}>) {
+type LayoutProps = {
+  children: Readonly<ReactNode>;
+};
+
+export default function Layout({ children }: LayoutProps) {
   return (
     <html lang="en">
       <body
-        className={`${ppNeueMontreal.variable} ${ppNeueMontrealMono.variable} antialiased [&_main]:min-h-svh [&_main]:pt-12 overflow-x-hidden`}
+        className={`${ppNeueMontreal.variable} ${ppNeueMontrealMono.variable} antialiased [&_main]:min-h-svh [&_main]:pt-12 overflow-x-hidden relative bg-noise`}
       >
         <Providers>
-          <div className="bg-noise fixed size-full top-0 left-0" />
-          <Nav />
+          <SiteHeader />
           {children}
         </Providers>
       </body>

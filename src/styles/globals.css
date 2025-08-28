@@ -3,6 +3,10 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@theme {
+  --color-border: #2e2e2e;
+}
+
 @theme inline {
   --color-background: #060606;
   --color-primary: #f6f6f6;
@@ -16,16 +20,17 @@
 
 @layer base {
   * {
-    @apply border-tertiary;
+    @apply border-border;
   }
-
   body {
     @apply bg-background text-primary min-h-svh font-mono;
   }
 }
 
-@layer components {
-  .bg-noise {
-    @apply bg-[url(/noise.webp)] bg-repeat opacity-30 -z-50;
-  }
+@utility bg-noise {
+  @apply before:absolute before:top-0 before:left-0 before:size-full before:bg-[url(/noise.webp)] before:bg-repeat before:opacity-30 before:-z-50;
+}
+
+@utility highlight-border-l {
+  @apply relative before:absolute before:h-5 before:w-0.5 before:bg-secondary before:top-1/2 before:-translate-y-1/2 before:left-0 hover:before:w-1 before:transition-all;
 }

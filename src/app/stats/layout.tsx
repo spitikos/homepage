@@ -1,13 +1,12 @@
 import { SelectedStatProvider } from "@/contexts";
 import { type ReactNode } from "react";
 
-const StatsLayout = ({
-  current,
-  chart,
-}: {
+type LayoutProps = {
   current: Readonly<ReactNode>;
   chart: Readonly<ReactNode>;
-}) => {
+};
+
+const StatsLayout = ({ current, chart }: LayoutProps) => {
   return (
     <main className="*:border-b">
       <SelectedStatProvider>

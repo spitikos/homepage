@@ -15,8 +15,8 @@ const navData = [
     label: "STATS",
   },
   {
-    link: "/wiki",
-    label: "WIKI",
+    link: "/docs",
+    label: "DOCS",
   },
 ];
 
@@ -39,7 +39,7 @@ export default function Home() {
             <Highlight key={item.link}>
               <Link
                 href={item.link}
-                className="w-full flex items-center px-4 py-3 leading-none relative before:absolute before:h-5 before:w-0.5 before:bg-primary before:top-1/2 before:-translate-y-1/2 before:left-0 hover:before:w-1 before:transition-all"
+                className="w-full flex items-center px-4 py-3 leading-none highlight-border-l"
               >
                 {item.label}
               </Link>

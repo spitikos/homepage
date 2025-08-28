@@ -1,0 +1,41 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "./globals.css";
+
+@layer components {
+  article {
+    @apply font-sans leading-loose;
+
+    h1 {
+      @apply text-4xl mb-8 font-bold;
+    }
+
+    h2 {
+      @apply text-2xl mt-8 pb-2 mb-4 font-medium border-b;
+    }
+
+    h3 {
+      @apply text-xl mt-6 mb-3 font-medium;
+    }
+
+    p {
+      @apply text-lg my-4;
+    }
+
+    pre {
+      @apply border rounded-lg p-4 my-4;
+
+      code {
+        @apply bg-transparent p-0 m-0 rounded-none;
+      }
+    }
+
+    code {
+      @apply bg-tertiary px-1 mx-0.5 rounded text-base;
+    }
+
+    ul {
+      @apply list-inside list-disc;
+    }
+  }
+}
