@@ -1,11 +1,10 @@
 "use client";
 
 import { StatChart } from "@/components/stat";
-import { SelectedStatContext } from "@/contexts";
-import { useContext } from "react";
+import { useSelectedStat } from "@/hooks/use-selected-stat";
 
 const Page = () => {
-  const { selectedStat } = useContext(SelectedStatContext);
+  const { selectedStat } = useSelectedStat();
 
   return (
     <div className="w-full h-[50vh]">

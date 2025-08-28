@@ -1,5 +1,5 @@
+import { type Stat } from "@/components/stat";
 import CONFIG from "@/lib/config";
-import { type Stat } from "@/lib/prometheus";
 
 const host: Stat[] = [
   {

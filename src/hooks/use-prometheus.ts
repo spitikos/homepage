@@ -1,6 +1,6 @@
 "use client";
 
-import { type Stat } from "@/lib/prometheus";
+import { type Stat } from "@/components/stat";
 import {
   PrometheusService,
   type StreamQueryResponse,
