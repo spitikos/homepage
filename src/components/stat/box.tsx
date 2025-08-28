@@ -1,16 +1,16 @@
 "use client";
 
 import { Highlight } from "@/components/highlight";
-import { type Stat } from "@/lib/prometheus";
 import { memo } from "react";
 import StatRow from "./row";
+import { type Stat } from "./types";
 
-type StatsBoxProps = {
+type StatBoxProps = {
   title: string;
   stats: Stat[];
 };
 
-const StatsBox = memo(({ title, stats }: StatsBoxProps) => {
+const StatBox = memo(({ title, stats }: StatBoxProps) => {
   return (
     <div className="**:leading-none p-5 not-last:border-r *:w-full overflow-hidden">
       <h3 className="font-normal mb-4">{title.toUpperCase()}</h3>
@@ -33,6 +33,6 @@ const StatsBox = memo(({ title, stats }: StatsBoxProps) => {
     </div>
   );
 });
-StatsBox.displayName = "StatsBox";
+StatBox.displayName = "StatsBox";
 
-export default StatsBox;
+export default StatBox;

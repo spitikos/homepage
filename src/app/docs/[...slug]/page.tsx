@@ -1,12 +1,12 @@
+import { DocsService } from "@/lib/api/proto";
 import { transport } from "@/lib/api/server";
 import "@/styles/article.css";
-import { DocsService } from "@buf/spitikos_api.bufbuild_es/docs/docs_pb";
 import { createClient } from "@connectrpc/connect";
 import { MarkdownAsync } from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
 
-export const revalidate = 60 * 60; /* 1 hour */
+export const revalidate = 3600; /* 1 hour */
 
 type PageProps = {
   params: Promise<{

@@ -2,10 +2,10 @@
 
 import { usePrometheus } from "@/hooks";
 import { useSelectedStat } from "@/hooks/use-selected-stat";
-import { type Stat } from "@/lib/prometheus";
 import { IconLoader2 } from "@tabler/icons-react";
 import { motion } from "motion/react";
 import { type ComponentProps, memo } from "react";
+import { type Stat } from "./types";
 
 type StatRowProps = { stat: Stat } & Omit<ComponentProps<"tr">, "onClick">;
 

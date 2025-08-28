@@ -1,4 +1,4 @@
-type Stat = {
+export type Stat = {
   field: string;
   query: string;
   displayType?: "literal" | "gauge";
@@ -10,5 +10,3 @@ type Stat = {
       refine?: (data: number) => number | string;
     }
 );
-
-export type { Stat };

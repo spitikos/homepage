@@ -6,14 +6,13 @@ import {
   ChartTooltip,
 } from "@/components/ui/chart";
 import { usePrometheus } from "@/hooks";
-import { type Stat } from "@/lib/prometheus";
-import { type Value } from "@buf/spitikos_api.bufbuild_es/prometheus/prometheus_pb";
+import { type Value } from "@/lib/api/proto";
 import { timestampDate } from "@bufbuild/protobuf/wkt";
-
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { memo } from "react";
 import { Line, LineChart, YAxis } from "recharts";
+import { type Stat } from "./types";
 
 dayjs.extend(relativeTime);
 

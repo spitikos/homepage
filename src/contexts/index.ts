@@ -1,2 +1,2 @@
-export * from "./highlight-context";
-export * from "./selected-stat-context";
+export * from "./highlight";
+export * from "./selected-stat";

@@ -1,6 +1,6 @@
 "use client";
 
-import { StatChart } from "@/components/stats";
+import { StatChart } from "@/components/stat";
 import { SelectedStatContext } from "@/contexts";
 import { useContext } from "react";
 
