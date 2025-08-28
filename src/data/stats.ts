@@ -27,7 +27,7 @@ const resource: Stat[] = [
     type: "value",
     field: "cpu",
     displayType: "gauge",
-    query: `avg(1 - rate(node_cpu_seconds_total{mode="idle"}[${CONFIG.STATS.AVG_OVER}]))`,
+    query: `avg_over_time((1 - avg without (cpu) (rate(node_cpu_seconds_total{mode="idle"}[1m])))[${CONFIG.STATS.AVG_OVER}:])`,
   },
   {
     type: "value",
@@ -62,13 +62,13 @@ const temperature: Stat[] = [
   {
     type: "value",
     field: "cpu",
-    query: `node_hwmon_temp_celsius{chip="1000120000_pcie_1f000c8000_adc", sensor="temp1"}`,
+    query: `avg_over_time(node_hwmon_temp_celsius{chip="1000120000_pcie_1f000c8000_adc", sensor="temp1"}[${CONFIG.STATS.AVG_OVER}:])`,
     refine: (data) => data.toFixed(2) + " °C",
   },
   {
     type: "value",
     field: "nvme",
-    query: `node_hwmon_temp_celsius{chip="nvme_nvme0", sensor="temp1"}`,
+    query: `avg_over_time(node_hwmon_temp_celsius{chip="nvme_nvme0", sensor="temp1"}[${CONFIG.STATS.AVG_OVER}:])`,
     refine: (data) => data.toFixed(2) + " °C",
   },
 ];
