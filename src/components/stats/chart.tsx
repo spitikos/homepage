@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/chart";
 import { usePrometheus } from "@/hooks";
 import { type Stat } from "@/lib/prometheus";
-import { type Value } from "@buf/spitikos_api.bufbuild_es/prometheusproxy/v1/types_pb";
+import { type Value } from "@buf/spitikos_api.bufbuild_es/prometheus/prometheus_pb";
 import { timestampDate } from "@bufbuild/protobuf/wkt";
 
 import dayjs from "dayjs";
